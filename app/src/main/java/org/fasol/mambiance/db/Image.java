@@ -10,13 +10,13 @@ public class Image extends DataObject {
 
     //Atributes
     /**
-     * int id of the object image
+     * long id of the object image
      */
-    private int image_id;
+    private long image_id;
     /**
-     * int id of the marker linked
+     * long id of the marker linked
      */
-    private int marqueur_id;
+    private long marqueur_id;
     /**
      * String location of the image
      */
@@ -26,16 +26,16 @@ public class Image extends DataObject {
     //Getters
     /**
      * getter for the Image_id
-     * @return int image_id
+     * @return long image_id
      */
-    public int getImage_id() {
+    public long getImage_id() {
         return image_id;
     }
     /**
      * getter for the marqueur_id
-     * @return int marqueur_id
+     * @return long marqueur_id
      */
-    public int getMarqueur_id() {
+    public long getMarqueur_id() {
         return marqueur_id;
     }
     /**
@@ -51,14 +51,14 @@ public class Image extends DataObject {
      * setter for the Image_id
      * @param  image_id
      */
-    public void setImage_id(int image_id) {
+    public void setImage_id(long image_id) {
         this.image_id = image_id;
     }
     /**
      * setter for the marqueur_id
      * @param  marqueur_id
      */
-    public void setMarqueur_id(int marqueur_id) {
+    public void setMarqueur_id(long marqueur_id) {
         this.marqueur_id = marqueur_id;
     }
     /**
@@ -90,7 +90,7 @@ public class Image extends DataObject {
         }
         else{
             long row_id = datasource.getDatabase().insert(MySQLiteHelper.TABLE_IMAGE, null, values);
-            this.setImage_id((int)row_id);
+            this.setImage_id(row_id);
             this.setRegistredInLocal(true);
         }
     }

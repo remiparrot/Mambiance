@@ -10,15 +10,15 @@ import android.content.ContentValues;
 public class Marqueur extends DataObject {
 
 	
-	//Atributes
+	//Attributes
 	/**
-	 * int id of the object marqueur
+	 * long id of the object marqueur
 	 */
-	private int marqueur_id;
+	private long marqueur_id;
 	/**
-	 * int id of the place to which the marker belongs
+	 * long id of the place to which the marker belongs
 	 */
-	private int lieu_id;
+	private long lieu_id;
 	/**
 	 * date when the marker is set
 	 */
@@ -27,17 +27,17 @@ public class Marqueur extends DataObject {
 	//Getters
 	/**
 	 * getter for the marqueur_id
-	 * @return int marqueur_id
+	 * @return long marqueur_id
 	 */
-	public int getMarqueur_id() {
+	public long getMarqueur_id() {
 		return marqueur_id;
 	}
 	
 	/**
 	 * getter for the lieu_id
-	 * @return int lieu_id
+	 * @return long lieu_id
 	 */
-	public int getLieu_id() {
+	public long getLieu_id() {
 		return lieu_id;
 	}
 
@@ -52,7 +52,7 @@ public class Marqueur extends DataObject {
 	 * setter for the marqueur_id
 	 * @param  marqueur_id
 	 */
-	public void setMarqueur_id(int marqueur_id) {
+	public void setMarqueur_id(long marqueur_id) {
 		this.marqueur_id = marqueur_id;
 	}
 
@@ -60,7 +60,7 @@ public class Marqueur extends DataObject {
 	 * setter for the lieu_id
 	 * @param lieu_id
 	 */
-	public void setLieu_id(int lieu_id) {
+	public void setLieu_id(long lieu_id) {
 		this.lieu_id = lieu_id;
 	}
 
@@ -99,7 +99,7 @@ public class Marqueur extends DataObject {
 		}
 		else{
 			long row_id = datasource.getDatabase().insert(MySQLiteHelper.TABLE_MARQUEUR, null, values);
-			this.setMarqueur_id((int)row_id);
+			this.setMarqueur_id(row_id);
 			this.setRegistredInLocal(true);
 		}
 	}

@@ -12,9 +12,9 @@ public class Lieu extends DataObject {
 
     //Atributes
     /**
-     * int id of the object lieu
+     * long id of the object lieu
      */
-    private int lieu_id;
+    private long lieu_id;
     /**
      * float latitude and longitude of the place
      */
@@ -28,9 +28,9 @@ public class Lieu extends DataObject {
     //Getters
     /**
      * getter for the Lieu_id
-     * @return int lieu_id
+     * @return long lieu_id
      */
-    public int getLieu_id() {
+    public long getLieu_id() {
         return lieu_id;
     }
     /**
@@ -59,7 +59,7 @@ public class Lieu extends DataObject {
      * setter for the Lieu_id
      * @param  lieu_id
      */
-    public void setLieu_id(int lieu_id) {
+    public void setLieu_id(long lieu_id) {
         this.lieu_id = lieu_id;
     }
     /**
@@ -107,7 +107,7 @@ public class Lieu extends DataObject {
         }
         else{
             long row_id = datasource.getDatabase().insert(MySQLiteHelper.TABLE_LIEU, null, values);
-            this.setLieu_id((int)row_id);
+            this.setLieu_id(row_id);
             this.setRegistredInLocal(true);
         }
     }

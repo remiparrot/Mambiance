@@ -12,25 +12,25 @@ public class Mot extends DataObject {
 
     //Atributes
     /**
-     * int id of the object mot
+     * long id of the object mot
      */
-    private int mot_id;
+    private long mot_id;
     /**
      * String text of the word
      */
     private String mot_libelle;
     /**
-     * int id of the marker linked
+     * long id of the marker linked
      */
-    private int marqueur_id;
+    private long marqueur_id;
 
 
     //Getters
     /**
      * getter for the Mot_id
-     * @return int mot_id
+     * @return long mot_id
      */
-    public int getMot_id() {
+    public long getMot_id() {
         return mot_id;
     }
     /**
@@ -40,9 +40,9 @@ public class Mot extends DataObject {
     public String getMot_libelle() { return mot_libelle; }
     /**
      * getter for the marqueur_id
-     * @return int marqueur_id
+     * @return long marqueur_id
      */
-    public int getMarqueur_id() {
+    public long getMarqueur_id() {
         return marqueur_id;
     }
 
@@ -52,7 +52,7 @@ public class Mot extends DataObject {
      * setter for the Mot_id
      * @param  mot_id
      */
-    public void setMot_id(int mot_id) {
+    public void setMot_id(long mot_id) {
         this.mot_id = mot_id;
     }
     /**
@@ -64,7 +64,7 @@ public class Mot extends DataObject {
      * setter for the marqueur_id
      * @param  marqueur_id
      */
-    public void setMarqueur_id(int marqueur_id) { this.marqueur_id = marqueur_id; }
+    public void setMarqueur_id(long marqueur_id) { this.marqueur_id = marqueur_id; }
 
 
     //Abstract methods
@@ -88,7 +88,7 @@ public class Mot extends DataObject {
         }
         else{
             long row_id = datasource.getDatabase().insert(MySQLiteHelper.TABLE_MOT, null, values);
-            this.setMot_id((int)row_id);
+            this.setMot_id(row_id);
             this.setRegistredInLocal(true);
         }
     }

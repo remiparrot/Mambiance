@@ -12,48 +12,48 @@ public class Curseur extends DataObject {
 
     //Atributes
     /**
-     * int id of the object curseur
+     * long id of the object curseur
      */
-    private int curseur_id;
+    private long curseur_id;
     /**
      * String libelle of the cursor
      */
     private String curseur_libelle;
     /**
-     * int value of the cursor
+     * long value of the cursor
      */
-    private int curseur_valeur;
+    private long curseur_valeur;
     /**
-     * int id of the marker linked
+     * long id of the marker linked
      */
-    private int marqueur_id;
+    private long marqueur_id;
 
 
     //Getters
     /**
      * getter for the Curseur_id
-     * @return int curseur_id
+     * @return long curseur_id
      */
-    public int getCurseur_id() {
+    public long getCurseur_id() {
         return curseur_id;
     }
     /**
      * getter for the Curseur_libelle
-     * @return int curseur_libelle
+     * @return long curseur_libelle
      */
     public String getCurseur_libelle() {
         return curseur_libelle;
     }
     /**
      * getter for the curseur_valeur
-     * @return int curseur_valeur
+     * @return long curseur_valeur
      */
-    public int getCurseur_valeur() { return curseur_valeur; }
+    public long getCurseur_valeur() { return curseur_valeur; }
     /**
      * getter for the marqueur_id
-     * @return int marqueur_id
+     * @return long marqueur_id
      */
-    public int getMarqueur_id() {
+    public long getMarqueur_id() {
         return marqueur_id;
     }
 
@@ -63,7 +63,7 @@ public class Curseur extends DataObject {
      * setter for the Curseur_id
      * @param  curseur_id
      */
-    public void setCurseur_id(int curseur_id) {
+    public void setCurseur_id(long curseur_id) {
         this.curseur_id = curseur_id;
     }
     /**
@@ -75,12 +75,12 @@ public class Curseur extends DataObject {
      * setter for the curseur_valeur
      * @param curseur_valeur
      */
-    public void setCurseur_valeur(int curseur_valeur) { this.curseur_valeur = curseur_valeur; }
+    public void setCurseur_valeur(long curseur_valeur) { this.curseur_valeur = curseur_valeur; }
     /**
      * setter for the marqueur_id
      * @param  marqueur_id
      */
-    public void setMarqueur_id(int marqueur_id) { this.marqueur_id = marqueur_id; }
+    public void setMarqueur_id(long marqueur_id) { this.marqueur_id = marqueur_id; }
 
 
     //Abstract methods
@@ -106,7 +106,7 @@ public class Curseur extends DataObject {
         }
         else{
             long row_id = datasource.getDatabase().insert(MySQLiteHelper.TABLE_CURSEUR, null, values);
-            this.setCurseur_id((int)row_id);
+            this.setCurseur_id(row_id);
             this.setRegistredInLocal(true);
         }
     }

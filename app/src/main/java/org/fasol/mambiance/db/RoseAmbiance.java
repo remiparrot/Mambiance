@@ -12,9 +12,9 @@ public class RoseAmbiance extends DataObject {
 
     //Atributes
     /**
-     * int id of the object rose_ambiance
+     * long id of the object rose_ambiance
      */
-    private int rose_ambiance_id;
+    private long rose_ambiance_id;
     /**
      * float olfactory level of the marker
      */
@@ -32,17 +32,17 @@ public class RoseAmbiance extends DataObject {
      */
     private float a;
     /**
-     * int id of the marker linked
+     * long id of the marker linked
      */
-    private int marqueur_id;
+    private long marqueur_id;
 
 
     //Getters
     /**
      * getter for the RoseAmbiance_id
-     * @return int rose_ambiance_id
+     * @return long rose_ambiance_id
      */
-    public int getRoseAmbiance_id() { return rose_ambiance_id; }
+    public long getRoseAmbiance_id() { return rose_ambiance_id; }
     /**
      * getter for the olfactory level
      * @return float o
@@ -65,9 +65,9 @@ public class RoseAmbiance extends DataObject {
     public float getT() { return t; }
     /**
      * getter for the marqueur_id
-     * @return int marqueur_id
+     * @return long marqueur_id
      */
-    public int getMarqueur_id() {
+    public long getMarqueur_id() {
         return marqueur_id;
     }
 
@@ -77,7 +77,7 @@ public class RoseAmbiance extends DataObject {
      * setter for the RoseAmbiance_id
      * @param  rose_ambiance_id
      */
-    public void setRoseAmbiance_id(int rose_ambiance_id) {
+    public void setRoseAmbiance_id(long rose_ambiance_id) {
         this.rose_ambiance_id = rose_ambiance_id;
     }
     /**
@@ -112,7 +112,7 @@ public class RoseAmbiance extends DataObject {
      * setter for the marqueur_id
      * @param  marqueur_id
      */
-    public void setMarqueur_id(int marqueur_id) {
+    public void setMarqueur_id(long marqueur_id) {
         this.marqueur_id = marqueur_id;
     }
 
@@ -142,7 +142,7 @@ public class RoseAmbiance extends DataObject {
         }
         else{
             long row_id = datasource.getDatabase().insert(MySQLiteHelper.TABLE_ROSEAMBIANCE, null, values);
-            this.setRoseAmbiance_id((int)row_id);
+            this.setRoseAmbiance_id(row_id);
             this.setRegistredInLocal(true);
         }
     }
