@@ -9,9 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import org.fasol.mambiance.db.LocalDataSource;
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton btn_user=null, btn_history=null, btn_map=null, btn_info=null, btn_edit=null;
+
+    public static LocalDataSource datasource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
