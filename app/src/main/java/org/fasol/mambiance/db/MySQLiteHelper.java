@@ -186,8 +186,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(MySQLiteHelper.class.getName(), "Upgrading database from version" + oldVersion + " to " + newVersion + ", which will destroy all your data");
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_LIEU + ", " + TABLE_MARQUEUR + ", " + TABLE_ROSEAMBIANCE + ", " + TABLE_IMAGE + ", " + TABLE_CURSEUR + ", " + TABLE_MOT + "; ");
+        Log.w(MySQLiteHelper.class.getName(), "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all your data");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIEU + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MARQUEUR + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ROSEAMBIANCE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_IMAGE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CURSEUR + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOT + "; ");
         onCreate(db);
     }
 

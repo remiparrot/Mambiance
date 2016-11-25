@@ -313,6 +313,7 @@ public class LocalDataSource {
      */
     private Lieu cursorToLieu(Cursor cursor) {
         Lieu p1 = new Lieu();
+        cursor.moveToFirst();
         p1.setLieu_id(cursor.getLong(0));
         p1.setLieu_nom(cursor.getString(1));
         p1.setAdresse(cursor.getString(2));

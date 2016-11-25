@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         datasource.open();
 
         // test ajout dans la BDD
-        Lieu l = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0,0);
+        Lieu l = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0.0f,0.0f);
         Marqueur m = datasource.createMarqueur(l.getLieu_id());
 
         btn_user=(ImageButton)findViewById(R.id.btn_user);
-        btn_edit=(ImageButton)findViewById( R.id.btn_edit);
+        btn_edit=(ImageButton)findViewById(R.id.btn_edit);
         btn_history=(ImageButton)findViewById(R.id.btn_history);
         btn_map=(ImageButton)findViewById(R.id.btn_map);
         btn_info=(ImageButton)findViewById(R.id.btn_info);
@@ -105,5 +105,11 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        datasource.close();
     }
 }
