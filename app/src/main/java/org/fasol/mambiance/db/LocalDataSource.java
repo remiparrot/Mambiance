@@ -190,8 +190,8 @@ public class LocalDataSource {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_LIEUNOM, nom);
         values.put(MySQLiteHelper.COLUMN_ADRESSE, adresse);
-        values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
         values.put(MySQLiteHelper.COLUMN_LATITUDE, latitude);
+        values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
         long insertId = database.insert(MySQLiteHelper.TABLE_LIEU, null, values);
         Cursor cursor = database.query(
                         MySQLiteHelper.TABLE_LIEU,

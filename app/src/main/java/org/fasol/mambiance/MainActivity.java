@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         datasource = new LocalDataSource(this);
+        datasource.open();
 
         // test ajout dans la BDD
         Lieu l = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0,0);
