@@ -33,6 +33,8 @@ public class HistoryActivity extends AppCompatActivity {
 
         v_list=(ListView)findViewById(R.id.listview_history);
 
+        // TODO requetes sur la BDD pour récupérer l'hitorique
+
         // ------------------ TEST de remplissage, d'affichage et de réaction au clic de la liste -----------
         // remplissage
         String[][] historique_test = new String[][]{

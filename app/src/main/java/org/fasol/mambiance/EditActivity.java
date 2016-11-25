@@ -11,6 +11,10 @@ import android.view.MenuItem;
  * Created by fasol on 18/11/16.
  */
 
+// TODO récupérer les données saisies
+    // TODO lier l'application appareil photo au bouton
+    // TODO enregistrer les données dans la BDD
+
 public class EditActivity extends AppCompatActivity {
 
     @Override

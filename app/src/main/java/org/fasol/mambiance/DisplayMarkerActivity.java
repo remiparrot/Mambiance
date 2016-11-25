@@ -11,6 +11,9 @@ import android.view.MenuItem;
  * Created by fasol on 18/11/16.
  */
 
+//TODO envoyer le marqueur en paramètre lors du changement d'activité
+    //TODO récupérer les infos à afficher dans la BDD
+
 public class DisplayMarkerActivity extends AppCompatActivity {
 
     @Override

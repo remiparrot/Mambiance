@@ -11,6 +11,8 @@ import android.view.MenuItem;
  * Created by fasol on 18/11/16.
  */
 
+// TODO carte avec geolocalisation
+
 public class MapActivity extends AppCompatActivity {
 
     @Override
