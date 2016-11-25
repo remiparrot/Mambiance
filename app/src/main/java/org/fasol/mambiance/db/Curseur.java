@@ -20,9 +20,9 @@ public class Curseur extends DataObject {
      */
     private String curseur_libelle;
     /**
-     * long value of the cursor
+     * int value of the cursor
      */
-    private long curseur_valeur;
+    private int curseur_valeur;
     /**
      * long id of the marker linked
      */
@@ -46,9 +46,9 @@ public class Curseur extends DataObject {
     }
     /**
      * getter for the curseur_valeur
-     * @return long curseur_valeur
+     * @return int curseur_valeur
      */
-    public long getCurseur_valeur() { return curseur_valeur; }
+    public int getCurseur_valeur() { return curseur_valeur; }
     /**
      * getter for the marqueur_id
      * @return long marqueur_id
@@ -75,7 +75,7 @@ public class Curseur extends DataObject {
      * setter for the curseur_valeur
      * @param curseur_valeur
      */
-    public void setCurseur_valeur(long curseur_valeur) { this.curseur_valeur = curseur_valeur; }
+    public void setCurseur_valeur(int curseur_valeur) { this.curseur_valeur = curseur_valeur; }
     /**
      * setter for the marqueur_id
      * @param  marqueur_id

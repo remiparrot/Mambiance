@@ -450,4 +450,328 @@ public class LocalDataSource {
         i1.setMarqueur_id(cursor.getLong(2));
         return i1;
     }
+
+    //----------------------------------- CURSEUR METHODES ------------------------------------------
+
+    /**
+     * creation a new Curseur in the database
+     * @param curseur_lib
+     * @param curseur_val
+     * @param marqueur_id
+     * @return Curseur is the created Curseur
+     */
+    public Curseur createCurseur(String curseur_lib, int curseur_val, long marqueur_id){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_CURSEURLIBELLE, curseur_lib);
+        values.put(MySQLiteHelper.COLUMN_CURSEURVALEUR, curseur_val);
+        long insertId = database.insert(MySQLiteHelper.TABLE_CURSEUR, null, values);
+        Cursor cursor = database.query(
+                MySQLiteHelper.TABLE_CURSEUR,
+                allColumnsCurseur,
+                MySQLiteHelper.COLUMN_CURSEURID+" = "+insertId,
+                null, null, null, null);
+        cursor.moveToFirst();
+        Curseur newCurseur = cursorToCurseur(cursor);//method at the end of the class
+        cursor.close();
+        return newCurseur;
+    }
+
+    /**
+     * update a Curseur
+     * @return Curseur updated
+     */
+    public Curseur updateCurseur(Curseur curseur, String curseur_lib, int curseur_val, long marqueur_id){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_CURSEURLIBELLE, curseur_lib);
+        values.put(MySQLiteHelper.COLUMN_CURSEURVALEUR, curseur_val);
+
+        database.update(MySQLiteHelper.TABLE_CURSEUR, values, MySQLiteHelper.COLUMN_CURSEURID + " = " +curseur.getCurseur_id(), null);
+        return getCurseurWithId(curseur.getCurseur_id());
+    }
+
+    /**
+     * knowing a Curseur_id, we want to get the curseur itself
+     * @param id is the id of the Curseur we are looking for
+     * @return c1 is the Curseur we were looking for
+     */
+    public Curseur getCurseurWithId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_CURSEURID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        Curseur c1 = cursorToCurseur(c);
+        c.close();
+        return c1;
+    }
+
+    /**
+     * knowing an curseur id we test if this Curseur exists
+     * @param id curseur id
+     * @return boolean says if the Curseur with this id exists or not
+     */
+    public boolean existCurseurWithId(long id){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_CURSEURID + " = \"" + id +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            res=true;
+        }
+        else {
+            c.close();
+            res=false;
+        }
+        return res;
+    }
+
+
+    /**
+     * deleting a Curseur
+     * @param c1 is the Curseur we want to delete
+     */
+    public void deleteCurseur(Curseur c1){
+        long id = c1.getCurseur_id();
+        System.out.println("Curseur deleted with id: "+ id);
+        database.delete(MySQLiteHelper.TABLE_CURSEUR, MySQLiteHelper.COLUMN_CURSEURID+" = "+ id, null);
+    }
+
+    /**
+     * deleting all Curseur
+     */
+    public void clearCurseur(){
+        System.out.println("Curseur cleared");
+        database.execSQL("DROP TABLE IF EXISTS Curseur");
+        database.execSQL(MySQLiteHelper.getDatabaseCreate6());
+    }
+
+    /**
+     * convert a cursor to a Curseur
+     * @param cursor
+     * @return Curseur
+     */
+    private Curseur cursorToCurseur(Cursor cursor) {
+        Curseur c1 = new Curseur();
+        c1.setCurseur_id(cursor.getLong(0));
+        c1.setCurseur_libelle(cursor.getString(1));
+        c1.setCurseur_valeur(cursor.getInt(2));
+        c1.setMarqueur_id(cursor.getLong(3));
+        return c1;
+    }
+
+    //----------------------------------- MOT METHODES ------------------------------------------
+
+    /**
+     * creation a new Mot in the database
+     * @param mot_lib
+     * @param marqueur_id
+     * @return Mot is the created Mot
+     */
+    public Mot createMot(String mot_lib, long marqueur_id){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_MOTLIBELLE, mot_lib);
+        long insertId = database.insert(MySQLiteHelper.TABLE_MOT, null, values);
+        Cursor cursor = database.query(
+                MySQLiteHelper.TABLE_MOT,
+                allColumnsMot,
+                MySQLiteHelper.COLUMN_MOTID+" = "+insertId,
+                null, null, null, null);
+        cursor.moveToFirst();
+        Mot newMot = cursorToMot(cursor);//method at the end of the class
+        cursor.close();
+        return newMot;
+    }
+
+    /**
+     * update a Mot
+     * @return Mot updated
+     */
+    public Mot updateMot(Mot mot, String mot_lib, long marqueur_id){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_MOTLIBELLE, mot_lib);
+
+        database.update(MySQLiteHelper.TABLE_MOT, values, MySQLiteHelper.COLUMN_MOTID + " = " +mot.getMot_id(), null);
+        return getMotWithId(mot.getMot_id());
+    }
+
+    /**
+     * knowing a Mot_id, we want to get the mot itself
+     * @param id is the id of the Mot we are looking for
+     * @return m1 is the Mot we were looking for
+     */
+    public Mot getMotWithId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_MOTID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        Mot m1 = cursorToMot(c);
+        c.close();
+        return m1;
+    }
+
+    /**
+     * knowing an mot id we test if this Mot exists
+     * @param id mot id
+     * @return boolean says if the Mot with this id exists or not
+     */
+    public boolean existMotWithId(long id){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_MOTID + " = \"" + id +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            res=true;
+        }
+        else {
+            c.close();
+            res=false;
+        }
+        return res;
+    }
+
+
+    /**
+     * deleting a Mot
+     * @param m1 is the Mot we want to delete
+     */
+    public void deleteMot(Mot m1){
+        long id = m1.getMot_id();
+        System.out.println("Mot deleted with id: "+ id);
+        database.delete(MySQLiteHelper.TABLE_MOT, MySQLiteHelper.COLUMN_MOTID+" = "+ id, null);
+    }
+
+    /**
+     * deleting all Mot
+     */
+    public void clearMot(){
+        System.out.println("Mot cleared");
+        database.execSQL("DROP TABLE IF EXISTS Mot");
+        database.execSQL(MySQLiteHelper.getDatabaseCreate5());
+    }
+
+    /**
+     * convert a cursor to a Mot
+     * @param cursor
+     * @return Mot
+     */
+    private Mot cursorToMot(Cursor cursor) {
+        Mot m1 = new Mot();
+        m1.setMot_id(cursor.getLong(0));
+        m1.setMot_libelle(cursor.getString(1));
+        m1.setMarqueur_id(cursor.getLong(2));
+        return m1;
+    }
+
+    //----------------------------------- ROSE_AMBIANCE METHODES ------------------------------------------
+
+    /**
+     * creation a new RoseAmbiance in the database
+     * @param o olfactory
+     * @param v visual/lighting
+     * @param t thermal
+     * @param a acoustical
+     * @param marqueur_id
+     * @return RoseAmbiance is the created RoseAmbiance
+     */
+    public RoseAmbiance createRoseAmbiance(float o, float v, float t, float a,long marqueur_id){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_OLFACTORY, o);
+        values.put(MySQLiteHelper.COLUMN_ACOUSTICAL, a);
+        values.put(MySQLiteHelper.COLUMN_VISUAL, v);
+        values.put(MySQLiteHelper.COLUMN_THERMAL, t);
+        long insertId = database.insert(MySQLiteHelper.TABLE_ROSEAMBIANCE, null, values);
+        Cursor cursor = database.query(
+                MySQLiteHelper.TABLE_ROSEAMBIANCE,
+                allColumnsRoseAmbiance,
+                MySQLiteHelper.COLUMN_ROSEID+" = "+insertId,
+                null, null, null, null);
+        cursor.moveToFirst();
+        RoseAmbiance newRoseAmbiance = cursorToRoseAmbiance(cursor);//method at the end of the class
+        cursor.close();
+        return newRoseAmbiance;
+    }
+
+    /**
+     * update a RoseAmbiance
+     * @return RoseAmbiance updated
+     */
+    public RoseAmbiance updateRoseAmbiance(RoseAmbiance rose, float o, float v, float t, float a, long marqueur_id){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_OLFACTORY, o);
+        values.put(MySQLiteHelper.COLUMN_ACOUSTICAL, a);
+        values.put(MySQLiteHelper.COLUMN_VISUAL, v);
+        values.put(MySQLiteHelper.COLUMN_THERMAL, t);
+
+        database.update(MySQLiteHelper.TABLE_ROSEAMBIANCE, values, MySQLiteHelper.COLUMN_ROSEID + " = " +rose.getRoseAmbiance_id(), null);
+        return getRoseAmbianceWithId(rose.getRoseAmbiance_id());
+    }
+
+    /**
+     * knowing a RoseAmbiance_id, we want to get the rose itself
+     * @param id is the id of the RoseAmbiance we are looking for
+     * @return m1 is the RoseAmbiance we were looking for
+     */
+    public RoseAmbiance getRoseAmbianceWithId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_ROSEID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        RoseAmbiance m1 = cursorToRoseAmbiance(c);
+        c.close();
+        return m1;
+    }
+
+    /**
+     * knowing an rose id we test if this RoseAmbiance exists
+     * @param id rose id
+     * @return boolean says if the RoseAmbiance with this id exists or not
+     */
+    public boolean existRoseAmbianceWithId(long id){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_ROSEID + " = \"" + id +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            res=true;
+        }
+        else {
+            c.close();
+            res=false;
+        }
+        return res;
+    }
+
+
+    /**
+     * deleting a RoseAmbiance
+     * @param r1 is the RoseAmbiance we want to delete
+     */
+    public void deleteRoseAmbiance(RoseAmbiance r1){
+        long id = r1.getRoseAmbiance_id();
+        System.out.println("RoseAmbiance deleted with id: "+ id);
+        database.delete(MySQLiteHelper.TABLE_ROSEAMBIANCE, MySQLiteHelper.COLUMN_ROSEID+" = "+ id, null);
+    }
+
+    /**
+     * deleting all RoseAmbiance
+     */
+    public void clearRoseAmbiance(){
+        System.out.println("RoseAmbiance cleared");
+        database.execSQL("DROP TABLE IF EXISTS RoseAmbiance");
+        database.execSQL(MySQLiteHelper.getDatabaseCreate3());
+    }
+
+    /**
+     * convert a cursor to a RoseAmbiance
+     * @param cursor
+     * @return RoseAmbiance
+     */
+    private RoseAmbiance cursorToRoseAmbiance(Cursor cursor) {
+        RoseAmbiance r1 = new RoseAmbiance();
+        r1.setRoseAmbiance_id(cursor.getLong(0));
+        r1.setO(cursor.getFloat(1));
+        r1.setV(cursor.getFloat(2));
+        r1.setT(cursor.getFloat(3));
+        r1.setA(cursor.getFloat(4));
+        r1.setMarqueur_id(cursor.getLong(5));
+        return r1;
+    }
+
+
 }
