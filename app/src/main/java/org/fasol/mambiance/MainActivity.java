@@ -9,7 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import org.fasol.mambiance.db.Lieu;
 import org.fasol.mambiance.db.LocalDataSource;
+import org.fasol.mambiance.db.Marqueur;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        datasource = new LocalDataSource(this);
+
+        // test ajout dans la BDD
+        Lieu l = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0,0);
+        Marqueur m = datasource.createMarqueur(l.getLieu_id());
 
         btn_user=(ImageButton)findViewById(R.id.btn_user);
         btn_edit=(ImageButton)findViewById( R.id.btn_edit);
