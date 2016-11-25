@@ -12,8 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.fasol.mambiance.db.MySQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +36,14 @@ public class HistoryActivity extends AppCompatActivity {
 
         v_list=(ListView)findViewById(R.id.listview_history);
 
-        // TODO requetes sur la BDD pour récupérer l'hitorique
+        // TODO requetes sur la BDD pour récupérer l'historique
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_item_history,
+                new String[]{MySQLiteHelper.COLUMN_LIEUNOM, MySQLiteHelper.COLUMN_ADRESSE, MySQLiteHelper.COLUMN_MARQUEURID},
+                new int[]{R.id.site_name,R.id.site_adress,R.id.date});
 
         // ------------------ TEST de remplissage, d'affichage et de réaction au clic de la liste -----------
-        // remplissage
+        /*// remplissage
         String[][] historique_test = new String[][]{
                 {"Parc à touristes", "3 rue du trottoir 44000 NANTES", "08/11/2016 - 16:05"},
                 {"La chaussure géante", "1 chemin des sans-papiers 44000 NANTES", "15/08/2016 - 8:11"},
@@ -79,7 +86,8 @@ public class HistoryActivity extends AppCompatActivity {
         }
         // création
         ListAdapter adapter = new SimpleAdapter(this, liste, R.layout.list_item_history,
-                new String[]{"nom_site","adresse_site","date"}, new int[]{R.id.site_name,R.id.site_adress,R.id.date});
+                new String[]{"nom_site","adresse_site","date"}, new int[]{R.id.site_name,R.id.site_adress,R.id.date});*/
+
         // affichage
         v_list.setAdapter(adapter);
         // réaction au clic

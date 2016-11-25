@@ -23,6 +23,10 @@ public class Lieu extends DataObject {
      * String name of the place
      */
     private String lieu_nom;
+    /**
+     * String adress of the place
+     */
+    private String adresse;
 
 
     //Getters
@@ -52,6 +56,11 @@ public class Lieu extends DataObject {
      * @return String lieu_nom
      */
     public String getLieu_nom() { return lieu_nom; }
+    /**
+     * getter for the adress
+     * @return String adresse
+     */
+    public String getAdresse() { return adresse; }
 
 
     //Setters
@@ -83,12 +92,19 @@ public class Lieu extends DataObject {
     public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
+    /**
+     * setter for the adress
+     * @param  adresse
+     */
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
 
     //Abstract methods
 
     @Override
     public String toString() {
-        return "Lieu [lieu_id=" + lieu_id + ", lieu_nom=" + lieu_nom + ", latitude=" + latitude
+        return "Lieu [lieu_id=" + lieu_id + ", lieu_nom=" + lieu_nom + ", adresse=" + adresse + ", latitude=" + latitude
                 + ", longitude=" + longitude + "]";
     }
 
@@ -100,6 +116,7 @@ public class Lieu extends DataObject {
         values.put(MySQLiteHelper.COLUMN_LATITUDE, this.latitude);
         values.put(MySQLiteHelper.COLUMN_LONGITUDE, this.longitude);
         values.put(MySQLiteHelper.COLUMN_LIEUNOM, this.lieu_nom);
+        values.put(MySQLiteHelper.COLUMN_ADRESSE, this.adresse);
 
         if(this.registredInLocal){
             String str = "lieu_id "+"="+this.lieu_id;

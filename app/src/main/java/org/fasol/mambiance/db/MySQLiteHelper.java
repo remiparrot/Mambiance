@@ -73,6 +73,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_LIEUNOM = "lieu_nom";
+    public static final String COLUMN_ADRESSE = "adresse";
 
     public static final String COLUMN_ROSEID = "rose_id";
     public static final String COLUMN_OLFACTORY = "o";
@@ -105,6 +106,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE = "create table " + TABLE_LIEU + " ("
             + COLUMN_LIEUID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_LIEUNOM + " text not null, "
+            + COLUMN_ADRESSE + " text not null, "
             + COLUMN_LATITUDE + " REAL, "
             + COLUMN_LONGITUDE + " REAL "
             + "); ";

@@ -181,13 +181,15 @@ public class LocalDataSource {
     /**
      * creation a new Lieu in the database
      * @param nom name of the place
+     * @param adresse
      * @param latitude latitude of the place
      * @param longitude longitude of the place
      * @return Lieu is the created Lieu
      */
-    public Lieu createLieu (String nom, double latitude, double longitude){
+    public Lieu createLieu (String nom, String adresse, double latitude, double longitude){
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_LIEUNOM, nom);
+        values.put(MySQLiteHelper.COLUMN_ADRESSE, adresse);
         values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
         values.put(MySQLiteHelper.COLUMN_LATITUDE, latitude);
         long insertId = database.insert(MySQLiteHelper.TABLE_LIEU, null, values);
@@ -206,9 +208,10 @@ public class LocalDataSource {
      * update a Lieu
      * @return Lieu updated
      */
-    public Lieu updateLieu(Lieu lieu, String nom, double latitude, double longitude, long adresse_id){
+    public Lieu updateLieu(Lieu lieu, String nom, String adresse, double latitude, double longitude, long adresse_id){
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_LIEUNOM, nom);
+        values.put(MySQLiteHelper.COLUMN_ADRESSE, adresse);
         values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
         values.put(MySQLiteHelper.COLUMN_LATITUDE, latitude);
 
@@ -312,8 +315,9 @@ public class LocalDataSource {
         Lieu p1 = new Lieu();
         p1.setLieu_id(cursor.getLong(0));
         p1.setLieu_nom(cursor.getString(1));
-        p1.setLatitude(cursor.getFloat(2));
-        p1.setLongitude(cursor.getFloat(3));
+        p1.setAdresse(cursor.getString(2));
+        p1.setLatitude(cursor.getFloat(3));
+        p1.setLongitude(cursor.getFloat(4));
         return p1;
     }
 
@@ -773,5 +777,19 @@ public class LocalDataSource {
         return r1;
     }
 
+    // ---------------------------------------- AUTRES METHODES ----------------------------------------------------
 
+    private static String GETHISTORIQUE=
+            "SELECT "+MySQLiteHelper.COLUMN_LIEUNOM+", "+MySQLiteHelper.COLUMN_ADRESSE+", "+MySQLiteHelper.COLUMN_DATECREATION+
+            " FROM "+MySQLiteHelper.TABLE_LIEU+" INNER JOIN "+MySQLiteHelper.TABLE_MARQUEUR+
+                    " ON "+MySQLiteHelper.TABLE_LIEU+"."+MySQLiteHelper.COLUMN_MARQUEURID+"="+MySQLiteHelper.TABLE_MARQUEUR+"."+MySQLiteHelper.COLUMN_MARQUEURID;
+
+    /**
+     * renvoie un cursor de l'historique des marqueurs contenant le nom du lieu, l'adresse et la date de saisie
+     * @return cursor
+     */
+    public Cursor getHistoriqueCursor(){
+        Cursor c = database.rawQuery(GETHISTORIQUE,null);
+        return c;
+    }
 }
