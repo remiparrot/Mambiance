@@ -1,5 +1,6 @@
 package org.fasol.mambiance.db;
 
+import java.util.Date;
 import java.util.Vector;
 
 
@@ -22,7 +23,7 @@ public class Marqueur extends DataObject {
 	/**
 	 * date when the marker is set
 	 */
-	private String date_creation;
+	private Date date_creation;
 
 	//Getters
 	/**
@@ -43,9 +44,9 @@ public class Marqueur extends DataObject {
 
 	/**
 	 * getter for the date_creation
-	 * @return String date_creation
+	 * @return Date date_creation
      */
-	public String getDate_creation() { return date_creation; }
+	public Date getDate_creation() { return date_creation; }
 
 	//Setters
 	/**
@@ -68,7 +69,7 @@ public class Marqueur extends DataObject {
 	 * setter for the datecreation
 	 * @param date_creation
      */
-	public void setDate_creation(String date_creation) { this.date_creation = date_creation; }
+	public void setDate_creation(Date date_creation) { this.date_creation = date_creation; }
 	
 	//Abstract methods
 	
@@ -91,7 +92,7 @@ public class Marqueur extends DataObject {
 
 		//values.put(MySQLiteHelper.COLUMN_MARQUEURID, this.marqueur_id);
 		values.put(MySQLiteHelper.COLUMN_LIEUID, this.lieu_id);
-		values.put(MySQLiteHelper.COLUMN_DATECREATION, this.date_creation);
+		values.put(MySQLiteHelper.COLUMN_DATECREATION, this.date_creation.toString());
 
 		if(this.registredInLocal){
 			String str = "marqueur_id "+"="+this.marqueur_id;

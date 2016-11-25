@@ -11,7 +11,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import fr.turfu.urbapp2.MainActivity;
+import org.fasol.mambiance.MainActivity;
 
 public class LocalDataSource {
     private static final String TAG = "localDataSource";
@@ -81,109 +81,55 @@ public class LocalDataSource {
         dbHelper.close();
     }
 
-	// MARQUEUR METHODES
-    public Marqueur createMarqueur() {
+    // ----------------------------------- MARQUEUR METHODES ------------------------------------------
+    /**
+     * creating a new Marqueur in the database
+     * @param lieu_id id of the place linked to the Marqueur
+     * @return Marqueur is the created Marqueur
+     */
+    public Marqueur createMarqueur(long lieu_id) {
         ContentValues values = new ContentValues();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date dateMnt = new Date(System.currentTimeMillis());
         values.put(MySQLiteHelper.COLUMN_DATECREATION, dateFormat.format(dateMnt));
+        values.put(MySQLiteHelper.COLUMN_LIEUID, lieu_id);
 
-    }
+        long insertId = database.insert(MySQLiteHelper.TABLE_MARQUEUR, null, values);
 
-
-    /**
-     * creating a new marker in the database
-     *
-     * @param str represents the name of the new project
-     * @return project is the created project
-     */
-    public Project createProject(String str) {
-        ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_PROJECTNAME, str);
-        long insertId = database.insert(MySQLiteHelper.TABLE_PROJECT, null, values);
-        //TODO check the utily of autoincrement
-        Cursor cursor =
-                database.query(
-                        MySQLiteHelper.TABLE_PROJECT,
-                        allColumnsProject,
-                        MySQLiteHelper.COLUMN_PROJECTID + " = " + insertId,
-                        null, null, null, null);
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_MARQUEUR,
+                allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = " + insertId, null,
+                null, null, null);
         cursor.moveToFirst();
-        Project newProject = cursorToProject(cursor);//method at the end of the class
+        Marqueur newMarqueur = cursorToMarqueur(cursor);
         cursor.close();
-        return newProject;
+        return newMarqueur;
     }
 
     /**
-     * overload of previous method
-     * creating a new project in the database
+     * knowing a Marqueur_id, we want to get the marqueur itself
      *
-     * @param id  is the project_id
-     * @param str is the project name
-     * @return project is the created project
+     * @param id is the id of the marqueur we are looking for
+     * @return m1 is the marqueur we were looking for
      */
-    public Project createProject(long id, String str) {
-        Boolean exist = existProjectWithId(id);
-
-        if (exist == true) {
-            Project existProject = getProjectWithId(id);
-            Project updatedProject = updateProject(existProject, str);
-            return updatedProject;
-        } else {
-            ContentValues values = new ContentValues();
-            values.put(MySQLiteHelper.COLUMN_PROJECTID, id);
-            values.put(MySQLiteHelper.COLUMN_PROJECTNAME, str);
-            long insertId = database.insert(MySQLiteHelper.TABLE_PROJECT, null,
-                    values);
-            Cursor cursor = database.query(MySQLiteHelper.TABLE_PROJECT,
-                    allColumnsProject, MySQLiteHelper.COLUMN_PROJECTID + " = " + insertId, null,
-                    null, null, null);
-            cursor.moveToFirst();
-            Project p2 = cursorToProject(cursor);
-            cursor.close();
-            return p2;
-        }
-    }
-
-    /**
-     * update a project
-     *
-     * @param project we ant to update
-     * @param descr   we want to change for
-     * @return project updated
-     */
-    public Project updateProject(Project project, String descr) {
-        ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_PROJECTNAME, descr);
-        database.update(MySQLiteHelper.TABLE_PROJECT, values, MySQLiteHelper.COLUMN_PROJECTID + " = " + project.getProjectId(), null);
-        return getProjectWithId(project.getProjectId());
-    }
-
-    /**
-     * knowing a project_id, we want to get the project itself
-     *
-     * @param id is the id of the project we are looking for
-     * @return p1 is the project we were looking for
-     */
-    public Project getProjectWithId(Long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_PROJECT, allColumnsProject, MySQLiteHelper.COLUMN_PROJECTID + " = \"" + id + "\"", null, null, null, null);
+    public Marqueur getMarqueurWithId(Long id) {
+        Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
         c.moveToFirst();
-        Project p1 = cursorToProject(c);
+        Marqueur m1 = cursorToMarqueur(c);
         c.close();
-        return p1;
+        return m1;
     }
 
+
     /**
-     * knowing an id we test if this project exists
+     * knowing an id we test if this marqueur exists
      *
-     * @param id is the id of the project we ask
-     * @return boolean says if the project with this id exists or not
+     * @param id is the id of the marqueur we ask
+     * @return boolean says if the marqueur with this id exists or not
      */
-    public Boolean existProjectWithId(Long id) {
-        Cursor c = database.rawQuery("SELECT * FROM "
-                + MySQLiteHelper.TABLE_PROJECT + " where " + MySQLiteHelper.COLUMN_PROJECTID + "=" + id, null);
-        if (c.moveToFirst()) {
+    public Boolean existMarqueurWithId(Long id) {
+        Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
+        if (c.getCount() > 0) {
             c.close();
             return true;
         } else {
@@ -193,760 +139,157 @@ public class LocalDataSource {
     }
 
     /**
-     * deleting a project
-     *
-     * @param p1 is the project we want to delete
+     * deleting Marqueur in the database
+     * @param m1 marqueur linked to the marqueur in the database
      */
-    public void deleteProject(Project p1) {
-        long id = p1.getProjectId();
-        System.out.println("Project deleted with id: " + id);
-        System.out.println(database.getPath());
-        database.delete(MySQLiteHelper.TABLE_PROJECT, MySQLiteHelper.COLUMN_PROJECTID + " = " + id, null);
+    public void deleteMarqueur(Marqueur m1) {
+        long id = m1.getMarqueur_id();
+        System.out.println("Marqueur deleted with id: " + id);
+        database.delete(MySQLiteHelper.TABLE_MARQUEUR, MySQLiteHelper.COLUMN_MARQUEURID + " = " + id, null);
     }
 
     /**
-     * query to get project information
+     * deleting all Marqueur in the database
      */
-    private static final String
-            GETALLPROJECTS =
-            "SELECT * FROM "
-                    + MySQLiteHelper.TABLE_PROJECT
-                    + " INNER JOIN " + MySQLiteHelper.TABLE_GPSGEOM
-                    + " ON " + MySQLiteHelper.TABLE_PROJECT + "." + MySQLiteHelper.COLUMN_GPSGEOMID + "=" + MySQLiteHelper.TABLE_GPSGEOM + "." + MySQLiteHelper.COLUMN_GPSGEOMID
-                    + ";";
-
-    /**
-     * query to get project information
-     */
-    private static final String
-            GETALLGPSGEOM =
-            "SELECT * FROM "
-                    + MySQLiteHelper.TABLE_GPSGEOM
-                    + ";";
-
-    /**
-     * query to get photo informations
-     */
-    private static final String
-            GETALLPHOTOS =
-            "SELECT * FROM "
-                    + MySQLiteHelper.TABLE_PHOTO
-                    + " INNER JOIN " + MySQLiteHelper.TABLE_GPSGEOM
-                    + " ON " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_GPSGEOMID + "=" + MySQLiteHelper.TABLE_GPSGEOM + "." + MySQLiteHelper.COLUMN_GPSGEOMID
-                    + ";";
-
-    /**
-     * query to get the biggest photo_id from local db
-     */
-    private static final String
-            GETMAXPHOTOID =
-            "SELECT " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_PHOTOID + " FROM "
-                    + MySQLiteHelper.TABLE_PHOTO
-                    + " ORDER BY DESC LIMIT 1 ;";
-
-    /**
-     * query to get information of every photos and theirs geolocalisation knowing a project id
-     * need to add the project id and the ";" in the method argument
-     */
-    private static final String
-            GETPHOTOLINK =
-            "SELECT " + MySQLiteHelper.TABLE_PHOTO + ".*, " + MySQLiteHelper.TABLE_GPSGEOM + ".* FROM ("
-                    + MySQLiteHelper.TABLE_PHOTO
-                    + " INNER JOIN " + MySQLiteHelper.TABLE_COMPOSED
-                    + " ON " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_PHOTOID + "=" + MySQLiteHelper.TABLE_COMPOSED + "." + MySQLiteHelper.COLUMN_PHOTOID
-                    + ") INNER JOIN " + MySQLiteHelper.TABLE_GPSGEOM
-                    + " ON " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_GPSGEOMID + "=" + MySQLiteHelper.TABLE_GPSGEOM + "." + MySQLiteHelper.COLUMN_GPSGEOMID
-                    + " WHERE " + MySQLiteHelper.TABLE_COMPOSED + "." + MySQLiteHelper.COLUMN_PROJECTID + " = ";
-
-    /**
-     * execution of the query GETALLPROJECTS
-     *
-     * @return projectsList that is a List of found projects
-     */
-    public List<Project> getAllProjects() {
-        List<Project> projectsList = new ArrayList<Project>();
-
-        Cursor cursor = database.rawQuery(GETALLPROJECTS, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Project p1 = cursorToProject(cursor);
-            projectsList.add(p1);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return projectsList;
+    public void clearMarqueur() {
+        System.out.println("Marqueur cleared");
+        database.execSQL("DROP TABLE IF EXISTS Marqueur");
+        database.execSQL(MySQLiteHelper.getDatabaseCreate4());
     }
 
     /**
-     * execution of the query GETALLGPSGEOM
-     *
-     * @return gpsGeomList that contains the gpsGeom found
-     */
-    public List<GpsGeom> getAllGpsGeom() {
-        List<GpsGeom> gpsGeomList = new ArrayList<GpsGeom>();
-
-        Cursor cursor = database.rawQuery(GETALLGPSGEOM, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            /**
-             * we now translate the content of the cursor into several projects
-             */
-            GpsGeom p1 = cursorToGpsGeom(cursor);
-            gpsGeomList.add(p1);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return gpsGeomList;
-    }
-
-    /**
-     * convert a cursor to a project
-     *
+     * return the Marqueur linkede to the cursor
      * @param cursor
-     * @return project
+     * @return Marqueur linked to the cursor
      */
-    private Project cursorToProject(Cursor cursor) {
-        Project p1 = new Project();
-        if (cursor.moveToFirst()) {
-            p1.setProjectId(cursor.getLong(0));
-            p1.setProjectName(cursor.getString(1));
-            p1.setGpsGeom_id(cursor.getLong(2));
-        }
-        //TODO créer 2 fonctions, une pour l'instanciation du projet, une pour la recopie des gpsgeom
-        /*try{
-	    	p1.setExt_GpsGeomCoord(cursor.getString(4));
-	    }
-	    catch (Exception e){e.printStackTrace();};
-	    */
-        return p1;
+    private Marqueur cursorToMarqueur(Cursor cursor) {
+        Marqueur marqueur = new Marqueur();
+
+        marqueur.setMarqueur_id(cursor.getLong(0));
+
+        Date dateCreation = new Date(cursor.getLong(1) * 1000);
+        marqueur.setDate_creation(dateCreation);
+
+        marqueur.setLieu_id(cursor.getLong(2));
+        return marqueur;
     }
 
-    // PHOTO METHODS
+    //----------------------------------- LIEU METHODES ------------------------------------------
 
     /**
-     * call the query to get all photos
-     *
-     * @return a list of every photo
+     * creation a new Lieu in the database
+     * @param nom name of the place
+     * @param latitude latitude of the place
+     * @param longitude longitude of the place
+     * @return Lieu is the created Lieu
      */
-    public List<Photo> getAllPhotos() {
-        List<Photo> photosList = new ArrayList<Photo>();
-
-        Cursor cursor = database.rawQuery(GETALLPHOTOS, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Photo p1 = cursorToPhoto(cursor);
-            photosList.add(p1);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return photosList;
-    }
-
-    /**
-     * we want every photos linked to a project knowing its id
-     *
-     * @param project_id
-     * @return photosList found by the query
-     */
-    public List<Photo> getAllPhotolinkedtoProject(long project_id) {
-        List<Photo> photosList = new ArrayList<Photo>();
-
-        Cursor cursor = database.rawQuery(GETPHOTOLINK + project_id + ";", null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Photo p1 = cursorToPhoto(cursor);
-            photosList.add(p1);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return photosList;
-    }
-
-    /**
-     * delete a photo
-     *
-     * @param p1 is a photo
-     */
-    public void deletePhoto(Photo p1) {
-        long id = p1.getPhoto_id();
-        System.out.println("Photo deleted with id: " + id);
-        database.delete(MySQLiteHelper.TABLE_PHOTO, MySQLiteHelper.COLUMN_PHOTOID + " = " + id, null);
-    }
-
-    /**
-     * create a photo with the following attributes
-     *
-     * @param descr
-     * @param author
-     * @param url    is the name of the pohot with its extension
-     * @return the created photo
-     */
-    public Photo createPhoto(String descr, String author, String url) {
+    public Lieu createLieu (String nom, double latitude, double longitude){
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_PHOTODESCRIPTION, descr);
-        values.put(MySQLiteHelper.COLUMN_PHOTOAUTHOR, author);
-        values.put(MySQLiteHelper.COLUMN_PHOTOURL, url);
-        long insertId = database.insert(MySQLiteHelper.TABLE_PHOTO, null, values);
-        //TODO check the utily of autoincrement
-        Cursor cursor =
-                database.query(
-                        MySQLiteHelper.TABLE_PHOTO,
-                        allColumnsPhoto,
-                        MySQLiteHelper.COLUMN_PHOTOID + " = " + insertId,
+        values.put(MySQLiteHelper.COLUMN_LIEUNOM, nom);
+        values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
+        values.put(MySQLiteHelper.COLUMN_LATITUDE, latitude);
+        long insertId = database.insert(MySQLiteHelper.TABLE_LIEU, null, values);
+        Cursor cursor = database.query(
+                        MySQLiteHelper.TABLE_LIEU,
+                        allColumnsLieu,
+                        MySQLiteHelper.COLUMN_LIEUID+" = "+insertId,
                         null, null, null, null);
         cursor.moveToFirst();
-        Photo newPhoto = cursorToPhoto(cursor);//method at the end of the class
+        Lieu newLieu = cursorToLieu(cursor);//method at the end of the class
         cursor.close();
-        return newPhoto;
+        return newLieu;
     }
 
     /**
-     * translate a cursor to a photo
-     *
-     * @param cursor
-     * @return the photo created
+     * update a Lieu
+     * @return Lieu updated
      */
-    private Photo cursorToPhoto(Cursor cursor) {
-        Photo p1 = new Photo();
-        p1.setPhoto_id(cursor.getLong(0));
-        p1.setPhoto_description(cursor.getString(1));
-        p1.setPhoto_author(cursor.getString(2));
-        p1.setPhoto_url(cursor.getString(3));
-        p1.setPhoto_adresse(cursor.getString(4));
-        p1.setPhoto_nbrPoints(cursor.getLong(5));
-        p1.setPhoto_derniereModif(cursor.getInt(6));
-        p1.setGpsGeom_id(cursor.getLong(7));
-        //TODO créer 2 fonctions, une pour l'instanciation du projet, une pour la recopie des gpsgeom
-        try {
-            p1.setExt_GpsGeomCoord(cursor.getString(9));
-        } catch (Exception e) {
-        }
-        ;
-        return p1;
-    }
-
-    /**
-     * knowing an id we want to get the related photo
-     *
-     * @param id of the photo
-     * @return p1 is the photo with this id
-     */
-    public Photo getPhotoWithID(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_PHOTO, allColumnsPhoto, MySQLiteHelper.COLUMN_PHOTOID + " = \"" + id + "\"", null, null, null, null);
-        c.moveToFirst();
-        Photo p1 = cursorToPhoto(c);
-        c.close();
-        return p1;
-    }
-
-    // GPS GEOM METHODS
-
-    /**
-     * create a GPSGeom in the database and update the photo tuple where photo_id = id with this gpsgeom_id
-     *
-     * @param str
-     * @param id
-     * @return
-     */
-    public GpsGeom createGPSGeomToPhoto(String str, long id) {
-        GpsGeom gps1 = createGPSGeom(str);
-        //TODO TRANSACTION
-        ContentValues args = new ContentValues();
-        args.put(MySQLiteHelper.COLUMN_GPSGEOMID, gps1.getGpsGeomsId());
-        int d = database.update(MySQLiteHelper.TABLE_PHOTO, args, MySQLiteHelper.COLUMN_PHOTOID + "=" + id, null);
-        return gps1;
-    }
-
-    public GpsGeom getGpsGeomWithID(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_GPSGEOM, allColumnsGpsGeom, MySQLiteHelper.COLUMN_GPSGEOMID + " = \"" + id + "\"", null, null, null, null);
-        c.moveToFirst();
-        GpsGeom g1 = cursorToGpsGeom(c);
-        c.close();
-        return g1;
-    }
-
-    /**
-     * create a GPSGeom in the database and update the project tuple where project_id = id with this gpsgeom_id
-     *
-     * @param str need to use convertion method of utils package
-     * @param id  is the project_id were we need to update the gpsGeom_id foreign key
-     * @return gs1 is the gpsGeom created
-     */
-    public GpsGeom createGPSGeomToProject(String str, long id) {
-        GpsGeom gps1 = createGPSGeom(str);
-        //TODO TRANSACTION
-        ContentValues args = new ContentValues();
-        args.put(MySQLiteHelper.COLUMN_GPSGEOMID, gps1.getGpsGeomsId());
-        int d = database.update(MySQLiteHelper.TABLE_PROJECT, args, MySQLiteHelper.COLUMN_PROJECTID + "=" + id, null);
-        return gps1;
-    }
-
-    /**
-     * create a GPSGeom with the gpsgeom_coord str
-     *
-     * @param str
-     * @return GpsGeom
-     */
-    public GpsGeom createGPSGeom(String str) {
+    public Lieu updateLieu(Lieu lieu, String nom, double latitude, double longitude, long adresse_id){
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_GPSGEOMCOORD, str);
-        long insertId = database.insert(MySQLiteHelper.TABLE_GPSGEOM, null, values);
-        //TODO check the utily of autoincrement
-        Cursor cursor = database.query(
-                MySQLiteHelper.TABLE_GPSGEOM,
-                allColumnsGpsGeom,
-                MySQLiteHelper.COLUMN_GPSGEOMID + " = " + insertId,
-                null, null, null, null);
-        cursor.moveToFirst();
-        GpsGeom newGpsGeom = cursorToGpsGeom(cursor);//method at the end of the class
-        cursor.close();
-        return newGpsGeom;
+        values.put(MySQLiteHelper.COLUMN_LIEUNOM, nom);
+        values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
+        values.put(MySQLiteHelper.COLUMN_LATITUDE, latitude);
+
+        database.update(MySQLiteHelper.TABLE_LIEU, values, MySQLiteHelper.COLUMN_LIEUID + " = " +lieu.getLieu_id(), null);
+        return getLieuWithId(lieu.getLieu_id());
     }
 
     /**
-     * convert the cursor to the object gpsGeom
-     *
-     * @param cursor
-     * @return GpsGeom
+     * knowing a Mot_id, we want to get the image itself
+     * @param id is the id of the image we are looking for
+     * @return c1 is the image we were looking for
      */
-    private GpsGeom cursorToGpsGeom(Cursor cursor) {
-        GpsGeom p1 = new GpsGeom();
-        p1.setGpsGeomId(cursor.getLong(0));
-        p1.setGpsGeomCoord(cursor.getString(1));
+    public Lieu getLieuWithId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEUS, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUSID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        Lieu p1 = cursorToLieu(c);
+        c.close();
         return p1;
     }
 
-    // methods related to Composed.java that represents the link between Photos and projects
-
     /**
-     * create an object Composed that link a photo and a project
-     *
-     * @param proj_id  of the project
-     * @param photo_id of the photo
-     * @return Composed object that links both elements
+     * knowing a Mot_id, we want to get the image itself
+     * @param id is the id of the image we are looking for
+     * @return c1 is the image we were looking for
      */
-    public Composed createLink(long proj_id, long photo_id) {
-        ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_PROJECTID, proj_id);
-        values.put(MySQLiteHelper.COLUMN_PHOTOID, photo_id);
-        database.insert(MySQLiteHelper.TABLE_COMPOSED, null, values);
-        //TODO check the utily of autoincrement
-        Cursor cursor = database.query(
-                MySQLiteHelper.TABLE_COMPOSED,
-                allColumnsComposed,
-                MySQLiteHelper.COLUMN_PROJECTID + " = " + proj_id + " AND " + MySQLiteHelper.COLUMN_PHOTOID + " = " + photo_id,
-                null, null, null, null);
-        cursor.moveToFirst();
-        Composed link1 = cursorToComposed(cursor);//method at the end of the class
-        cursor.close();
-        return link1;
-    }
 
-    /**
-     * translate a cursor to a composed
-     *
-     * @param cursor
-     * @return
-     */
-    private Composed cursorToComposed(Cursor cursor) {
-        Composed link1 = new Composed();
-        link1.setProject_id(cursor.getLong(0));
-        link1.setPhoto_id(cursor.getLong(1));
-        return link1;
-    }
-
-    // OTHER METHODS TO GET LOCAL ITEMS FROM ID. ADDED FOR USE IN THE SYNC CLASS
-
-    /**
-     * knowing an id, we find the related element
-     *
-     * @param id
-     * @return element
-     */
-    public Marqueur getElementWithID(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_ELEMENT, allColumnsElement,
-                MySQLiteHelper.COLUMN_ELEMENTID + " = \"" + id + "\"", null, null, null, null);
+    public Lieu getLieuWithLatLng(double lat, double lng){
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEUS, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUSLATITUDE + " = \"" + lat +"\"" + " AND " + MySQLiteHelper.COLUMN_LIEUSLONGITUDE + " = \"" + lng +"\"", null, null, null, null);
         c.moveToFirst();
-        Marqueur e = cursorToElement(c);
+        Lieu p1 = cursorToLieu(c);
         c.close();
-        return e;
+        return p1;
     }
 
     /**
-     * translate a cursor to an element
-     *
-     * @param cursor
-     * @return element created
+     * knowing an id we test if this image exists
+     * @param id is the id of the image we ask
+     * @return boolean says if the image with this id exists or not
      */
-    public Marqueur cursorToElement(Cursor cursor) {
-        Marqueur e = new Marqueur();
-        e.setElement_id(cursor.getLong(0));
-        e.setPhoto_id(cursor.getLong(1));
-        e.setMaterial_id(cursor.getLong(2));
-        e.setElementType_id(cursor.getLong(3));
-        e.setPixelGeom_id(cursor.getLong(4));
-        e.setGpsGeom_id(cursor.getLong(5));
-        e.setElement_color(cursor.getString(6));
-        return e;
-    }
-
-    /**
-     * knowing an id, we find the pixelGeom
-     *
-     * @param id
-     * @return pixelGeom
-     */
-    public PixelGeom getPixelGeomWithID(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_PIXELGEOM, allColumnsPixelGeom,
-                MySQLiteHelper.COLUMN_PIXELGEOMID + " = \"" + id + "\"", null, null, null, null);
-        c.moveToFirst();
-        PixelGeom p = cursorToPixelGeom(c);
-        c.close();
-        return p;
-    }
-
-    /**
-     * translate a cursor to a pixelGeom
-     *
-     * @param cursor
-     * @return pixelGeom
-     */
-    public PixelGeom cursorToPixelGeom(Cursor cursor) {
-        PixelGeom p = new PixelGeom();
-        p.setPixelGeomId(cursor.getLong(0));
-        p.setPixelGeom_the_geom(cursor.getString(1));
-        return p;
-    }
-
-    /**
-     * knowing an id we find the related material
-     *
-     * @param id
-     * @return material
-     */
-    public Material getMaterialWithID(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_MATERIAL, allColumnsMaterial,
-                MySQLiteHelper.COLUMN_MATERIALID + " = \"" + id + "\"", null, null, null, null);
-        c.moveToFirst();
-        Material m = cursorToMaterial(c);
-        c.close();
-        return m;
-    }
-
-    /**
-     * translate a cursor to a Material
-     *
-     * @param cursor
-     * @return material created
-     */
-    public Material cursorToMaterial(Cursor cursor) {
-        Material m = new Material();
-        m.setMaterial_id(cursor.getLong(0));
-        m.setMaterial_name(cursor.getString(1));
-        return m;
-    }
-
-    /**
-     * knowing an id we want to find the related lementType
-     *
-     * @param id
-     * @return ElementType
-     */
-    public ElementType getElementTypeWithID(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_ELEMENTTYPE, allColumnsElementType,
-                MySQLiteHelper.COLUMN_ELEMENTTYPEID + " = \"" + id + "\"", null, null, null, null);
-        c.moveToFirst();
-        ElementType e = cursorToElementType(c);
-        c.close();
-        return e;
-    }
-
-    /**
-     * translate a cursor to an elementtype
-     *
-     * @param cursor
-     * @return ElementType
-     */
-    public ElementType cursorToElementType(Cursor cursor) {
-        ElementType e = new ElementType();
-        e.setElementType_id(cursor.getLong(0));
-        e.setElementType_name(cursor.getString(1));
-        return e;
-    }
-
-    //METHODS FOR ELMENTS TYPE
-
-    //Create ellementType in the database
-    //TODO sync with the external database
-
-    /**
-     * method that register a new type in the DB
-     */
-    public void createElementTypeInDB(String str) {
-        boolean flag = true;
-        Cursor cursor = database.rawQuery(GETALLELEMENTTYPEID, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            if (cursor.getString(1).equals(str)) {
-                flag = false;
-            }
-            cursor.moveToNext();
+    public Boolean existLieuWithLatLng(double lat, double lng){
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEUS, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUSLATITUDE + " = \"" + lat +"\"" + " AND " + MySQLiteHelper.COLUMN_LIEUSLONGITUDE + " = \"" + lng +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            return true;
         }
-        if (flag) {
-            ContentValues values = new ContentValues();
-            values.put(MySQLiteHelper.COLUMN_ELEMENTTYPENAME, str);
-            long insertId = database.insert(MySQLiteHelper.TABLE_ELEMENTTYPE, null, values);
+        else {
+            c.close();
+            return false;
         }
     }
 
+
     /**
-     * sql query that returns every elementtype_id
+     * deleting an Image
+     * @param i1 is the image we want to delete
      */
-    private static final String
-            GETALLELEMENTTYPEID =
-            "SELECT * FROM "
-                    + MySQLiteHelper.TABLE_ELEMENTTYPE
-                    + ";";
+    public void deleteLieu(Lieu p1){
+        long id = p1.getLieu_id();
+        System.out.println("Image deleted with id: "+ id);
+        database.delete(MySQLiteHelper.TABLE_IMAGE, MySQLiteHelper.COLUMN_IMAGEID+" = "+ id, null);
+    }
 
     /**
-     * TODO WTF execute the query and update elementType list
-     *//*
-	public void getAllElementType(){
-		List<ElementType> elementTypeList = new ArrayList<ElementType>();
-		Cursor cursor = database.rawQuery(GETALLELEMENTTYPEID,null);
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			ElementType p1 = cursorToElementType(cursor);
-			elementTypeList.add(p1);
-			cursor.moveToNext();
-		}
-		cursor.close();
-	MainActivity.elementType=(ArrayList<ElementType>) elementTypeList;
-	}
-	//METHODS FOR MATERIALS
-	
-	//Create ellementType in the database
-	//TODO sync with the external database
-	/**
-	 * method that register a new type in the DB
+     * deleting all Lieu
+     */
+    public void clearLieu(){
+        System.out.println("Lieu cleared");
+        database.execSQL("DROP TABLE IF EXISTS Lieu");
+        database.execSQL(MySQLiteHelper.getDatabaseCreate3());
+    }
 
-	public void createMaterialInDB(String str){
-		boolean flag = true;
-		Cursor cursor = database.rawQuery(GETALLMATERIALID,null);
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			if(cursor.getString(1).equals(str)){
-				flag=false;
-			}
-			cursor.moveToNext();
-		}
-		if(flag){
-			ContentValues values = new ContentValues(); 
-			values.put(MySQLiteHelper.COLUMN_MATERIALNAME, str);
-			long insertId = database.insert(MySQLiteHelper.TABLE_MATERIAL, null, values);
-		}
-	}
-	
-	/**
-	 * sql query that counts the number of element type
-
-	private static final String
-	GETALLMATERIALID = 
-		"SELECT * FROM "
-		+ MySQLiteHelper.TABLE_MATERIAL 
-		+";"
-	;
-	
-	/**
-	 * use the query to get all material from the db and updating static field
-
-	public void getAllMaterial(){
-		List<Material> materialList = new ArrayList<Material>();
-		Cursor cursor = database.rawQuery(GETALLMATERIALID,null);
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			Material p1 = cursorToMaterial(cursor);
-			materialList.add(p1);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		MainActivity.material=(ArrayList<Material>) materialList;		
-	}
-
-	/**
-	 * get information from datasource.database to public static fields from main activity once a local project is loaded
-
-	
-	/**
-	 * SQL query that select every pixelgeom linked to the registred photo
-	 * need to complete with PHOTO_ID and ";"
-
-	private static final String
-	GETALLPIXELGEOMFROMAPHOTO = 
-		"SELECT "
-		+ MySQLiteHelper.TABLE_PIXELGEOM+"."+MySQLiteHelper.COLUMN_PIXELGEOMID+", "
-		+ MySQLiteHelper.TABLE_PIXELGEOM+"."+MySQLiteHelper.COLUMN_PIXELGEOMCOORD
-		+" FROM "
-		+ MySQLiteHelper.TABLE_PIXELGEOM
-		+" INNER JOIN " + MySQLiteHelper.TABLE_ELEMENT 
-		+" ON " + MySQLiteHelper.TABLE_ELEMENT + "." + MySQLiteHelper.COLUMN_PIXELGEOMID +" = " + MySQLiteHelper.TABLE_PIXELGEOM + "." + MySQLiteHelper.COLUMN_PIXELGEOMID
-		+" WHERE " + MySQLiteHelper.TABLE_ELEMENT + "." + MySQLiteHelper.COLUMN_PHOTOID+" = " 
-	;
-
-	/**
-	 * register values from the above query in the static public field pixelGeom (instance of arrayList) from MainActivity
-
-	public void instanciateAllpixelGeom(){
-		ArrayList<PixelGeom> pixelGeomList = new ArrayList<PixelGeom>();
-		
-		Cursor cursor = database.rawQuery(GETALLPIXELGEOMFROMAPHOTO + MainActivity.photo.getPhoto_id() +" ;",null);
-		
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			PixelGeom p1 = cursorToPixelGeom(cursor);
-			p1.setRegistredInLocal(true);
-			pixelGeomList.add(p1);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		MainActivity.pixelGeom= pixelGeomList;
-	}
-	
-	/**
-	 * SQL query that select every element linked to the registred photo knowing a photo_id
-	 * need to complete with PHOTO_ID and ";"
-
-	private static final String
-	GETALLELEMENTFROMAPHOTO = 
-		"SELECT "
-		+ "* "
-		+" FROM "
-		+ MySQLiteHelper.TABLE_ELEMENT
-		+" WHERE " + MySQLiteHelper.TABLE_ELEMENT + "." + MySQLiteHelper.COLUMN_PHOTOID+" = " 
-	;
-
-	/**
-	 * register values from the above query in the static public field pixelGeom (instance of arrayList) from MainActivity
-
-	public void instanciateAllElement(){
-		ArrayList<Marqueur> elementList = new ArrayList<Marqueur>();
-		
-		Cursor cursor = database.rawQuery(GETALLELEMENTFROMAPHOTO + MainActivity.photo.getPhoto_id() +" ;",null);
-		
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			Marqueur p1 = cursorToElement(cursor);
-			p1.setRegistredInLocal(true);
-			elementList.add(p1);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		MainActivity.element= elementList;
-	}
-	
-	/**
-	 * SQL query that select every gpsgeom linked to the registred photo knowing a photo_id
-	 * need to complete with PHOTO_ID and ";"
-
-	private static final String
-	GETALLGPSGEOMFROMAPHOTO = 
-		"SELECT "
-		+ MySQLiteHelper.TABLE_GPSGEOM+"."+MySQLiteHelper.COLUMN_GPSGEOMID+", "
-		+ MySQLiteHelper.TABLE_GPSGEOM+"."+MySQLiteHelper.COLUMN_GPSGEOMCOORD
-		+" FROM "
-		+ MySQLiteHelper.TABLE_GPSGEOM
-		+" INNER JOIN " + MySQLiteHelper.TABLE_PHOTO 
-		+" ON " + MySQLiteHelper.TABLE_GPSGEOM + "." + MySQLiteHelper.COLUMN_GPSGEOMID +" = " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_GPSGEOMID
-		+" WHERE " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_PHOTOID+" = "
-	;
-
-	/**
-	 * register values from the above query in the static public field pixelGeom (instance of arrayList) from MainActivity
-
-	public void instanciateAllGpsGeom(){
-		ArrayList<GpsGeom> gpsGeomList = new ArrayList<GpsGeom>();
-		
-		Cursor cursor = database.rawQuery(GETALLGPSGEOMFROMAPHOTO + MainActivity.photo.getPhoto_id() +" ;",null);
-		
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			GpsGeom p1 = cursorToGpsGeom(cursor);
-			p1.setRegistredInLocal(true);
-			gpsGeomList.add(p1);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		MainActivity.gpsGeom= gpsGeomList;
-	}
-	
-	/**
-	 * SQL query that select every projectss linked to the registred photo knowing this photo_id
-	 * need to complete with PHOTO_ID and ";"
-
-	private static final String
-	GETALLPROJECTFROMAPHOTO = 
-		"SELECT "
-		+ MySQLiteHelper.TABLE_PROJECT+"."+MySQLiteHelper.COLUMN_PROJECTID+", "
-		
-		+ MySQLiteHelper.TABLE_PROJECT+"."+MySQLiteHelper.COLUMN_PROJECTNAME+", "
-		+ MySQLiteHelper.TABLE_PROJECT+"."+MySQLiteHelper.COLUMN_GPSGEOMID
-		+" FROM "
-		+ MySQLiteHelper.TABLE_PROJECT
-		+" INNER JOIN " + MySQLiteHelper.TABLE_COMPOSED 
-		+" ON " + MySQLiteHelper.TABLE_PROJECT + "." + MySQLiteHelper.COLUMN_PROJECTID +" = " + MySQLiteHelper.TABLE_COMPOSED + "." + MySQLiteHelper.COLUMN_PROJECTID
-		+" WHERE " + MySQLiteHelper.TABLE_COMPOSED + "." + MySQLiteHelper.COLUMN_PHOTOID+" = " 
-	;
-
-	/**
-	 * register values from the above query in the static public field pixelGeom (instance of arrayList) from MainActivity
-
-	public void instanciateAllProject(){
-		ArrayList<Project> projectList = new ArrayList<Project>();
-		
-		Cursor cursor = database.rawQuery(GETALLPROJECTFROMAPHOTO + MainActivity.photo.getPhoto_id() +" ;",null);
-		
-		cursor.moveToFirst();
-		while(!cursor.isAfterLast()){
-			Project p1 = cursorToProject(cursor);
-			p1.setRegistredInLocal(true);
-			projectList.add(p1);
-			cursor.moveToNext();
-		}
-		cursor.close();
-		for(Project p :MainActivity.project)
-			Log.i(TAG+"before","id="+p.getProjectId()+" name = "+p.getProjectName());
-		MainActivity.project= projectList;
-		for(Project p :MainActivity.project)
-			Log.i(TAG+"after","id="+p.getProjectId()+" name = "+p.getProjectName());
-	}
-
-	/**
-	 * get information from datasource.database to public static fields photo in main activity once a local project is loaded
-
-	
-	/**
-	 * SQL query that select every pixelgeom link to the registred photo
-
-	private static final String
-	GETPHOTO = 
-		"SELECT * FROM "
-		+ MySQLiteHelper.TABLE_PHOTO
-		+" WHERE " + MySQLiteHelper.TABLE_PHOTO + "." + MySQLiteHelper.COLUMN_PHOTOID+" = " 
-		//need to complete with PHOTO_ID and ";"
-	;
-
-	/**
-	 * register values from the above query in the static public field pixelGeom (instance of arrayList) from MainActivity
-
-	public void instanciatePhoto(long id ){
-		Cursor cursor = database.rawQuery(GETPHOTO + id +" ;",null);
-		cursor.moveToFirst();
-		Photo photoLoaded = cursorToPhoto(cursor);
-		cursor.close();
-		MainActivity.photo= photoLoaded;
-	}*/
+    /**
+     * convert a cursor to an image
+     * @param cursor
+     * @return image
+     */
+    private Lieu cursorToLieu(Cursor cursor) {
+        Lieu p1 = new Lieu();
+        p1.setLieu_id(cursor.getLong(0));
+        p1.setLieu_nom(cursor.getString(1));
+        p1.setLieu_latitude(cursor.getDouble(2));
+        p1.setLieu_longitude(cursor.getDouble(3));
+        p1.setAdresse_id(cursor.getLong(4));
+        return p1;
+    }
 }
