@@ -112,7 +112,7 @@ public class LocalDataSource {
      * @param id is the id of the marqueur we are looking for
      * @return m1 is the marqueur we were looking for
      */
-    public Marqueur getMarqueurWithId(Long id) {
+    public Marqueur getMarqueurWithId(long id) {
         Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
         c.moveToFirst();
         Marqueur m1 = cursorToMarqueur(c);
@@ -127,15 +127,17 @@ public class LocalDataSource {
      * @param id is the id of the marqueur we ask
      * @return boolean says if the marqueur with this id exists or not
      */
-    public Boolean existMarqueurWithId(Long id) {
+    public boolean existMarqueurWithId(Long id) {
+        boolean res;
         Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
         if (c.getCount() > 0) {
             c.close();
-            return true;
+            res=true;
         } else {
             c.close();
-            return false;
+            res=false;
         }
+        return res;
     }
 
     /**
@@ -154,7 +156,7 @@ public class LocalDataSource {
     public void clearMarqueur() {
         System.out.println("Marqueur cleared");
         database.execSQL("DROP TABLE IF EXISTS Marqueur");
-        database.execSQL(MySQLiteHelper.getDatabaseCreate4());
+        database.execSQL(MySQLiteHelper.getDatabaseCreate2());
     }
 
     /**
@@ -215,58 +217,81 @@ public class LocalDataSource {
     }
 
     /**
-     * knowing a Mot_id, we want to get the image itself
-     * @param id is the id of the image we are looking for
-     * @return c1 is the image we were looking for
+     * knowing a Lieu_id, we want to get the lieu itself
+     * @param id is the id of the Lieu we are looking for
+     * @return l1 is the Lieu we were looking for
      */
     public Lieu getLieuWithId(long id){
-        Cursor c = database.query(MySQLiteHelper.TABLE_LIEUS, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUSID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUID + " = \"" + id +"\"", null, null, null, null);
         c.moveToFirst();
-        Lieu p1 = cursorToLieu(c);
+        Lieu l1 = cursorToLieu(c);
         c.close();
-        return p1;
+        return l1;
     }
 
     /**
-     * knowing a Mot_id, we want to get the image itself
-     * @param id is the id of the image we are looking for
-     * @return c1 is the image we were looking for
+     * knowing a Lieu_id, we want to get the lieu itself
+     * @param lat latitude
+     * @param lng longitude
+     * @return l1 is the lieu we were looking for
      */
 
     public Lieu getLieuWithLatLng(double lat, double lng){
-        Cursor c = database.query(MySQLiteHelper.TABLE_LIEUS, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUSLATITUDE + " = \"" + lat +"\"" + " AND " + MySQLiteHelper.COLUMN_LIEUSLONGITUDE + " = \"" + lng +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_LATITUDE + " = \"" + lat +"\"" + " AND " + MySQLiteHelper.COLUMN_LONGITUDE + " = \"" + lng +"\"", null, null, null, null);
         c.moveToFirst();
-        Lieu p1 = cursorToLieu(c);
+        Lieu l1 = cursorToLieu(c);
         c.close();
-        return p1;
+        return l1;
     }
 
     /**
-     * knowing an id we test if this image exists
-     * @param id is the id of the image we ask
-     * @return boolean says if the image with this id exists or not
+     * knowing an id we test if this Lieu exists
+     * @param id Lieu id
+     * @return boolean says if the Lieu with this id exists or not
      */
-    public Boolean existLieuWithLatLng(double lat, double lng){
-        Cursor c = database.query(MySQLiteHelper.TABLE_LIEUS, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUSLATITUDE + " = \"" + lat +"\"" + " AND " + MySQLiteHelper.COLUMN_LIEUSLONGITUDE + " = \"" + lng +"\"", null, null, null, null);
+    public boolean existLieuWithId(long id){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUID + " = \"" + id +"\"", null, null, null, null);
         if(c.getCount()>0){
             c.close();
-            return true;
+            res=true;
         }
         else {
             c.close();
-            return false;
+            res=false;
         }
+        return res;
+    }
+
+    /**
+     * knowing an id we test if this Lieu exists
+     * @param lat latitude
+     * @param lng longitude
+     * @return boolean says if the Lieu with this id exists or not
+     */
+    public boolean existLieuWithLatLng(double lat, double lng){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_LATITUDE + " = \"" + lat +"\"" + " AND " + MySQLiteHelper.COLUMN_LONGITUDE + " = \"" + lng +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            res=true;
+        }
+        else {
+            c.close();
+            res=false;
+        }
+        return res;
     }
 
 
     /**
-     * deleting an Image
-     * @param i1 is the image we want to delete
+     * deleting a Lieu
+     * @param l1 is the Lieu we want to delete
      */
-    public void deleteLieu(Lieu p1){
-        long id = p1.getLieu_id();
-        System.out.println("Image deleted with id: "+ id);
-        database.delete(MySQLiteHelper.TABLE_IMAGE, MySQLiteHelper.COLUMN_IMAGEID+" = "+ id, null);
+    public void deleteLieu(Lieu l1){
+        long id = l1.getLieu_id();
+        System.out.println("Place deleted with id: "+ id);
+        database.delete(MySQLiteHelper.TABLE_LIEU, MySQLiteHelper.COLUMN_LIEUID+" = "+ id, null);
     }
 
     /**
@@ -275,21 +300,154 @@ public class LocalDataSource {
     public void clearLieu(){
         System.out.println("Lieu cleared");
         database.execSQL("DROP TABLE IF EXISTS Lieu");
-        database.execSQL(MySQLiteHelper.getDatabaseCreate3());
+        database.execSQL(MySQLiteHelper.getDatabaseCreate());
     }
 
     /**
-     * convert a cursor to an image
+     * convert a cursor to a Lieu
      * @param cursor
-     * @return image
+     * @return Lieu
      */
     private Lieu cursorToLieu(Cursor cursor) {
         Lieu p1 = new Lieu();
         p1.setLieu_id(cursor.getLong(0));
         p1.setLieu_nom(cursor.getString(1));
-        p1.setLieu_latitude(cursor.getDouble(2));
-        p1.setLieu_longitude(cursor.getDouble(3));
-        p1.setAdresse_id(cursor.getLong(4));
+        p1.setLatitude(cursor.getFloat(2));
+        p1.setLongitude(cursor.getFloat(3));
         return p1;
+    }
+
+    //----------------------------------- IMAGE METHODES ------------------------------------------
+
+    /**
+     * creation a new Image in the database
+     * @param marqueur_id 
+     * @param img_emp emplacement de l'image
+     * @return Image is the created Image
+     */
+    public Image createImage(long marqueur_id, String img_emp){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_IMAGEEMP, img_emp);
+        long insertId = database.insert(MySQLiteHelper.TABLE_IMAGE, null, values);
+        Cursor cursor = database.query(
+                MySQLiteHelper.TABLE_IMAGE,
+                allColumnsImage,
+                MySQLiteHelper.COLUMN_IMAGEID+" = "+insertId,
+                null, null, null, null);
+        cursor.moveToFirst();
+        Image newImage = cursorToImage(cursor);//method at the end of the class
+        cursor.close();
+        return newImage;
+    }
+
+    /**
+     * update a Image
+     * @return Image updated
+     */
+    public Image updateImage(Image image, long marqueur_id, String img_emp){
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
+        values.put(MySQLiteHelper.COLUMN_IMAGEEMP, img_emp);
+
+        database.update(MySQLiteHelper.TABLE_IMAGE, values, MySQLiteHelper.COLUMN_IMAGEID + " = " +image.getImage_id(), null);
+        return getImageWithId(image.getImage_id());
+    }
+
+    /**
+     * knowing a Image_id, we want to get the image itself
+     * @param id is the id of the Image we are looking for
+     * @return i1 is the Image we were looking for
+     */
+    public Image getImageWithId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_IMAGEID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        Image i1 = cursorToImage(c);
+        c.close();
+        return i1;
+    }
+
+    /**
+     * knowing a image emplacement, we want to get the image itself
+     * @param img_emp image emplacement
+     * @return i1 is the image we were looking for
+     */
+
+    public Image getImageWithEmp(String img_emp){
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_IMAGEEMP + " = \"" + img_emp +"\"", null, null, null, null);
+        c.moveToFirst();
+        Image i1 = cursorToImage(c);
+        c.close();
+        return i1;
+    }
+
+    /**
+     * knowing an image emplacement we test if this Image exists
+     * @param img_emp image emplacement
+     * @return boolean says if the Image with this id exists or not
+     */
+    public boolean existImageWithEmp(String img_emp){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_IMAGEEMP + " = \"" + img_emp +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            res=true;
+        }
+        else {
+            c.close();
+            res=false;
+        }
+        return res;
+    }
+    /**
+     * knowing an image id we test if this Image exists
+     * @param id image id
+     * @return boolean says if the Image with this id exists or not
+     */
+    public boolean existImageWithId(long id){
+        boolean res;
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_IMAGEID + " = \"" + id +"\"", null, null, null, null);
+        if(c.getCount()>0){
+            c.close();
+            res=true;
+        }
+        else {
+            c.close();
+            res=false;
+        }
+        return res;
+    }
+
+
+    /**
+     * deleting a Image
+     * @param i1 is the Image we want to delete
+     */
+    public void deleteImage(Image i1){
+        long id = i1.getImage_id();
+        System.out.println("Image deleted with id: "+ id);
+        database.delete(MySQLiteHelper.TABLE_IMAGE, MySQLiteHelper.COLUMN_IMAGEID+" = "+ id, null);
+    }
+
+    /**
+     * deleting all Image
+     */
+    public void clearImage(){
+        System.out.println("Image cleared");
+        database.execSQL("DROP TABLE IF EXISTS Image");
+        database.execSQL(MySQLiteHelper.getDatabaseCreate4());
+    }
+
+    /**
+     * convert a cursor to a Image
+     * @param cursor
+     * @return Image
+     */
+    private Image cursorToImage(Cursor cursor) {
+        Image i1 = new Image();
+        i1.setImage_id(cursor.getLong(0));
+        i1.setImage_emp(cursor.getString(1));
+        i1.setMarqueur_id(cursor.getLong(2));
+        return i1;
     }
 }

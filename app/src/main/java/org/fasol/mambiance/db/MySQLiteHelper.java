@@ -136,7 +136,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      */
     private static final String DATABASE_CREATE4 = "create table " + TABLE_IMAGE + " ("
             + COLUMN_IMAGEID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + COLUMN_IMAGEEMP + " TEXT NOT NULL, "
+            + COLUMN_IMAGEEMP + " TEXT NOT NULL UNIQUE, "
             + COLUMN_MARQUEURID + " INTEGER, "
             + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_MARQUEURID + " )"
             + "); ";
