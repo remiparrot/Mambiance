@@ -38,8 +38,10 @@ public class HistoryActivity extends AppCompatActivity {
 
         v_list=(ListView)findViewById(R.id.listview_history);
 
+        datasource.open();
+
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.list_item_history, datasource.getHistoriqueCursor(),
-                new String[]{MySQLiteHelper.COLUMN_LIEUNOM, MySQLiteHelper.COLUMN_ADRESSE, MySQLiteHelper.COLUMN_MARQUEURID},
+                new String[]{MySQLiteHelper.COLUMN_LIEUNOM, MySQLiteHelper.COLUMN_ADRESSE, MySQLiteHelper.COLUMN_DATECREATION},
                 new int[]{R.id.site_name,R.id.site_adress,R.id.date});
 
         // ------------------ TEST de remplissage, d'affichage et de réaction au clic de la liste -----------
@@ -144,5 +146,11 @@ public class HistoryActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        datasource.close();
     }
 }

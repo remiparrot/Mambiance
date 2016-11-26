@@ -27,12 +27,12 @@ public class LocalDataSource {
     private MySQLiteHelper dbHelper;
 
     //TODO Adddescription for javadoc
-    private String[] allColumnsMarqueur = {MySQLiteHelper.COLUMN_MARQUEURID, MySQLiteHelper.COLUMN_DATECREATION, MySQLiteHelper.COLUMN_LIEUID};
-    private String[] allColumnsCurseur = {MySQLiteHelper.COLUMN_CURSEURID, MySQLiteHelper.COLUMN_CURSEURLIBELLE, MySQLiteHelper.COLUMN_CURSEURVALEUR, MySQLiteHelper.COLUMN_MARQUEURID};
-    private String[] allColumnsImage = {MySQLiteHelper.COLUMN_IMAGEID, MySQLiteHelper.COLUMN_IMAGEEMP, MySQLiteHelper.COLUMN_MARQUEURID};
-    private String[] allColumnsMot = {MySQLiteHelper.COLUMN_MOTID, MySQLiteHelper.COLUMN_MOTLIBELLE, MySQLiteHelper.COLUMN_MARQUEURID};
-    private String[] allColumnsLieu = {MySQLiteHelper.COLUMN_LIEUID, MySQLiteHelper.COLUMN_LIEUNOM, MySQLiteHelper.COLUMN_LATITUDE, MySQLiteHelper.COLUMN_LONGITUDE};
-    private String[] allColumnsRoseAmbiance = {MySQLiteHelper.COLUMN_ROSEID, MySQLiteHelper.COLUMN_ACOUSTICAL, MySQLiteHelper.COLUMN_OLFACTORY, MySQLiteHelper.COLUMN_VISUAL, MySQLiteHelper.COLUMN_THERMAL, MySQLiteHelper.COLUMN_MARQUEURID};
+    private String[] allColumnsMarqueur = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_DATECREATION, MySQLiteHelper.COLUMN_LIEUID};
+    private String[] allColumnsCurseur = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_CURSEURLIBELLE, MySQLiteHelper.COLUMN_CURSEURVALEUR, MySQLiteHelper.COLUMN_MARQUEURID};
+    private String[] allColumnsImage = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_IMAGEEMP, MySQLiteHelper.COLUMN_MARQUEURID};
+    private String[] allColumnsMot = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_MOTLIBELLE, MySQLiteHelper.COLUMN_MARQUEURID};
+    private String[] allColumnsLieu = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_LIEUNOM, MySQLiteHelper.COLUMN_ADRESSE, MySQLiteHelper.COLUMN_LATITUDE, MySQLiteHelper.COLUMN_LONGITUDE};
+    private String[] allColumnsRoseAmbiance = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_ACOUSTICAL, MySQLiteHelper.COLUMN_OLFACTORY, MySQLiteHelper.COLUMN_VISUAL, MySQLiteHelper.COLUMN_THERMAL, MySQLiteHelper.COLUMN_MARQUEURID};
 
     //getters
 
@@ -98,7 +98,7 @@ public class LocalDataSource {
         long insertId = database.insert(MySQLiteHelper.TABLE_MARQUEUR, null, values);
 
         Cursor cursor = database.query(MySQLiteHelper.TABLE_MARQUEUR,
-                allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = " + insertId, null,
+                allColumnsMarqueur, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
         Marqueur newMarqueur = cursorToMarqueur(cursor);
@@ -113,7 +113,7 @@ public class LocalDataSource {
      * @return m1 is the marqueur we were looking for
      */
     public Marqueur getMarqueurWithId(long id) {
-        Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_ID + " = \"" + id + "\"", null, null, null, null);
         c.moveToFirst();
         Marqueur m1 = cursorToMarqueur(c);
         c.close();
@@ -129,7 +129,7 @@ public class LocalDataSource {
      */
     public boolean existMarqueurWithId(Long id) {
         boolean res;
-        Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_MARQUEUR, allColumnsMarqueur, MySQLiteHelper.COLUMN_ID + " = \"" + id + "\"", null, null, null, null);
         if (c.getCount() > 0) {
             c.close();
             res=true;
@@ -147,7 +147,7 @@ public class LocalDataSource {
     public void deleteMarqueur(Marqueur m1) {
         long id = m1.getMarqueur_id();
         System.out.println("Marqueur deleted with id: " + id);
-        database.delete(MySQLiteHelper.TABLE_MARQUEUR, MySQLiteHelper.COLUMN_MARQUEURID + " = " + id, null);
+        database.delete(MySQLiteHelper.TABLE_MARQUEUR, MySQLiteHelper.COLUMN_ID + " = " + id, null);
     }
 
     /**
@@ -160,7 +160,7 @@ public class LocalDataSource {
     }
 
     /**
-     * return the Marqueur linkede to the cursor
+     * return the Marqueur linked to the cursor
      * @param cursor
      * @return Marqueur linked to the cursor
      */
@@ -196,7 +196,7 @@ public class LocalDataSource {
         Cursor cursor = database.query(
                         MySQLiteHelper.TABLE_LIEU,
                         allColumnsLieu,
-                        MySQLiteHelper.COLUMN_LIEUID+" = "+insertId,
+                        MySQLiteHelper.COLUMN_ID+" = "+insertId,
                         null, null, null, null);
         cursor.moveToFirst();
         Lieu newLieu = cursorToLieu(cursor);//method at the end of the class
@@ -215,7 +215,7 @@ public class LocalDataSource {
         values.put(MySQLiteHelper.COLUMN_LONGITUDE, longitude);
         values.put(MySQLiteHelper.COLUMN_LATITUDE, latitude);
 
-        database.update(MySQLiteHelper.TABLE_LIEU, values, MySQLiteHelper.COLUMN_LIEUID + " = " +lieu.getLieu_id(), null);
+        database.update(MySQLiteHelper.TABLE_LIEU, values, MySQLiteHelper.COLUMN_ID + " = " +lieu.getLieu_id(), null);
         return getLieuWithId(lieu.getLieu_id());
     }
 
@@ -225,7 +225,7 @@ public class LocalDataSource {
      * @return l1 is the Lieu we were looking for
      */
     public Lieu getLieuWithId(long id){
-        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         c.moveToFirst();
         Lieu l1 = cursorToLieu(c);
         c.close();
@@ -254,7 +254,7 @@ public class LocalDataSource {
      */
     public boolean existLieuWithId(long id){
         boolean res;
-        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_LIEUID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_LIEU, allColumnsLieu, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         if(c.getCount()>0){
             c.close();
             res=true;
@@ -294,7 +294,7 @@ public class LocalDataSource {
     public void deleteLieu(Lieu l1){
         long id = l1.getLieu_id();
         System.out.println("Place deleted with id: "+ id);
-        database.delete(MySQLiteHelper.TABLE_LIEU, MySQLiteHelper.COLUMN_LIEUID+" = "+ id, null);
+        database.delete(MySQLiteHelper.TABLE_LIEU, MySQLiteHelper.COLUMN_ID+" = "+ id, null);
     }
 
     /**
@@ -313,7 +313,6 @@ public class LocalDataSource {
      */
     private Lieu cursorToLieu(Cursor cursor) {
         Lieu p1 = new Lieu();
-        cursor.moveToFirst();
         p1.setLieu_id(cursor.getLong(0));
         p1.setLieu_nom(cursor.getString(1));
         p1.setAdresse(cursor.getString(2));
@@ -338,7 +337,7 @@ public class LocalDataSource {
         Cursor cursor = database.query(
                 MySQLiteHelper.TABLE_IMAGE,
                 allColumnsImage,
-                MySQLiteHelper.COLUMN_IMAGEID+" = "+insertId,
+                MySQLiteHelper.COLUMN_ID+" = "+insertId,
                 null, null, null, null);
         cursor.moveToFirst();
         Image newImage = cursorToImage(cursor);//method at the end of the class
@@ -355,7 +354,7 @@ public class LocalDataSource {
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
         values.put(MySQLiteHelper.COLUMN_IMAGEEMP, img_emp);
 
-        database.update(MySQLiteHelper.TABLE_IMAGE, values, MySQLiteHelper.COLUMN_IMAGEID + " = " +image.getImage_id(), null);
+        database.update(MySQLiteHelper.TABLE_IMAGE, values, MySQLiteHelper.COLUMN_ID + " = " +image.getImage_id(), null);
         return getImageWithId(image.getImage_id());
     }
 
@@ -365,7 +364,7 @@ public class LocalDataSource {
      * @return i1 is the Image we were looking for
      */
     public Image getImageWithId(long id){
-        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_IMAGEID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         c.moveToFirst();
         Image i1 = cursorToImage(c);
         c.close();
@@ -411,7 +410,7 @@ public class LocalDataSource {
      */
     public boolean existImageWithId(long id){
         boolean res;
-        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_IMAGEID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         if(c.getCount()>0){
             c.close();
             res=true;
@@ -431,7 +430,7 @@ public class LocalDataSource {
     public void deleteImage(Image i1){
         long id = i1.getImage_id();
         System.out.println("Image deleted with id: "+ id);
-        database.delete(MySQLiteHelper.TABLE_IMAGE, MySQLiteHelper.COLUMN_IMAGEID+" = "+ id, null);
+        database.delete(MySQLiteHelper.TABLE_IMAGE, MySQLiteHelper.COLUMN_ID+" = "+ id, null);
     }
 
     /**
@@ -474,7 +473,7 @@ public class LocalDataSource {
         Cursor cursor = database.query(
                 MySQLiteHelper.TABLE_CURSEUR,
                 allColumnsCurseur,
-                MySQLiteHelper.COLUMN_CURSEURID+" = "+insertId,
+                MySQLiteHelper.COLUMN_ID+" = "+insertId,
                 null, null, null, null);
         cursor.moveToFirst();
         Curseur newCurseur = cursorToCurseur(cursor);//method at the end of the class
@@ -492,7 +491,7 @@ public class LocalDataSource {
         values.put(MySQLiteHelper.COLUMN_CURSEURLIBELLE, curseur_lib);
         values.put(MySQLiteHelper.COLUMN_CURSEURVALEUR, curseur_val);
 
-        database.update(MySQLiteHelper.TABLE_CURSEUR, values, MySQLiteHelper.COLUMN_CURSEURID + " = " +curseur.getCurseur_id(), null);
+        database.update(MySQLiteHelper.TABLE_CURSEUR, values, MySQLiteHelper.COLUMN_ID + " = " +curseur.getCurseur_id(), null);
         return getCurseurWithId(curseur.getCurseur_id());
     }
 
@@ -502,7 +501,7 @@ public class LocalDataSource {
      * @return c1 is the Curseur we were looking for
      */
     public Curseur getCurseurWithId(long id){
-        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_CURSEURID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         c.moveToFirst();
         Curseur c1 = cursorToCurseur(c);
         c.close();
@@ -516,7 +515,7 @@ public class LocalDataSource {
      */
     public boolean existCurseurWithId(long id){
         boolean res;
-        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_CURSEURID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         if(c.getCount()>0){
             c.close();
             res=true;
@@ -536,7 +535,7 @@ public class LocalDataSource {
     public void deleteCurseur(Curseur c1){
         long id = c1.getCurseur_id();
         System.out.println("Curseur deleted with id: "+ id);
-        database.delete(MySQLiteHelper.TABLE_CURSEUR, MySQLiteHelper.COLUMN_CURSEURID+" = "+ id, null);
+        database.delete(MySQLiteHelper.TABLE_CURSEUR, MySQLiteHelper.COLUMN_ID+" = "+ id, null);
     }
 
     /**
@@ -578,7 +577,7 @@ public class LocalDataSource {
         Cursor cursor = database.query(
                 MySQLiteHelper.TABLE_MOT,
                 allColumnsMot,
-                MySQLiteHelper.COLUMN_MOTID+" = "+insertId,
+                MySQLiteHelper.COLUMN_ID+" = "+insertId,
                 null, null, null, null);
         cursor.moveToFirst();
         Mot newMot = cursorToMot(cursor);//method at the end of the class
@@ -595,7 +594,7 @@ public class LocalDataSource {
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
         values.put(MySQLiteHelper.COLUMN_MOTLIBELLE, mot_lib);
 
-        database.update(MySQLiteHelper.TABLE_MOT, values, MySQLiteHelper.COLUMN_MOTID + " = " +mot.getMot_id(), null);
+        database.update(MySQLiteHelper.TABLE_MOT, values, MySQLiteHelper.COLUMN_ID + " = " +mot.getMot_id(), null);
         return getMotWithId(mot.getMot_id());
     }
 
@@ -605,7 +604,7 @@ public class LocalDataSource {
      * @return m1 is the Mot we were looking for
      */
     public Mot getMotWithId(long id){
-        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_MOTID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         c.moveToFirst();
         Mot m1 = cursorToMot(c);
         c.close();
@@ -619,7 +618,7 @@ public class LocalDataSource {
      */
     public boolean existMotWithId(long id){
         boolean res;
-        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_MOTID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         if(c.getCount()>0){
             c.close();
             res=true;
@@ -639,7 +638,7 @@ public class LocalDataSource {
     public void deleteMot(Mot m1){
         long id = m1.getMot_id();
         System.out.println("Mot deleted with id: "+ id);
-        database.delete(MySQLiteHelper.TABLE_MOT, MySQLiteHelper.COLUMN_MOTID+" = "+ id, null);
+        database.delete(MySQLiteHelper.TABLE_MOT, MySQLiteHelper.COLUMN_ID+" = "+ id, null);
     }
 
     /**
@@ -686,7 +685,7 @@ public class LocalDataSource {
         Cursor cursor = database.query(
                 MySQLiteHelper.TABLE_ROSEAMBIANCE,
                 allColumnsRoseAmbiance,
-                MySQLiteHelper.COLUMN_ROSEID+" = "+insertId,
+                MySQLiteHelper.COLUMN_ID+" = "+insertId,
                 null, null, null, null);
         cursor.moveToFirst();
         RoseAmbiance newRoseAmbiance = cursorToRoseAmbiance(cursor);//method at the end of the class
@@ -706,7 +705,7 @@ public class LocalDataSource {
         values.put(MySQLiteHelper.COLUMN_VISUAL, v);
         values.put(MySQLiteHelper.COLUMN_THERMAL, t);
 
-        database.update(MySQLiteHelper.TABLE_ROSEAMBIANCE, values, MySQLiteHelper.COLUMN_ROSEID + " = " +rose.getRoseAmbiance_id(), null);
+        database.update(MySQLiteHelper.TABLE_ROSEAMBIANCE, values, MySQLiteHelper.COLUMN_ID + " = " +rose.getRoseAmbiance_id(), null);
         return getRoseAmbianceWithId(rose.getRoseAmbiance_id());
     }
 
@@ -716,7 +715,7 @@ public class LocalDataSource {
      * @return m1 is the RoseAmbiance we were looking for
      */
     public RoseAmbiance getRoseAmbianceWithId(long id){
-        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_ROSEID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         c.moveToFirst();
         RoseAmbiance m1 = cursorToRoseAmbiance(c);
         c.close();
@@ -730,7 +729,7 @@ public class LocalDataSource {
      */
     public boolean existRoseAmbianceWithId(long id){
         boolean res;
-        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_ROSEID + " = \"" + id +"\"", null, null, null, null);
+        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_ID + " = \"" + id +"\"", null, null, null, null);
         if(c.getCount()>0){
             c.close();
             res=true;
@@ -750,7 +749,7 @@ public class LocalDataSource {
     public void deleteRoseAmbiance(RoseAmbiance r1){
         long id = r1.getRoseAmbiance_id();
         System.out.println("RoseAmbiance deleted with id: "+ id);
-        database.delete(MySQLiteHelper.TABLE_ROSEAMBIANCE, MySQLiteHelper.COLUMN_ROSEID+" = "+ id, null);
+        database.delete(MySQLiteHelper.TABLE_ROSEAMBIANCE, MySQLiteHelper.COLUMN_ID+" = "+ id, null);
     }
 
     /**
@@ -781,9 +780,9 @@ public class LocalDataSource {
     // ---------------------------------------- AUTRES METHODES ----------------------------------------------------
 
     private static String GETHISTORIQUE=
-            "SELECT "+MySQLiteHelper.COLUMN_LIEUNOM+", "+MySQLiteHelper.COLUMN_ADRESSE+", "+MySQLiteHelper.COLUMN_DATECREATION+
+            "SELECT "+MySQLiteHelper.COLUMN_LIEUNOM+", "+MySQLiteHelper.COLUMN_ADRESSE+", "+MySQLiteHelper.COLUMN_DATECREATION+", "+MySQLiteHelper.TABLE_MARQUEUR+"."+MySQLiteHelper.COLUMN_ID+
             " FROM "+MySQLiteHelper.TABLE_LIEU+" INNER JOIN "+MySQLiteHelper.TABLE_MARQUEUR+
-                    " ON "+MySQLiteHelper.TABLE_LIEU+"."+MySQLiteHelper.COLUMN_MARQUEURID+"="+MySQLiteHelper.TABLE_MARQUEUR+"."+MySQLiteHelper.COLUMN_MARQUEURID;
+                    " ON "+MySQLiteHelper.TABLE_LIEU+"."+MySQLiteHelper.COLUMN_ID+"="+MySQLiteHelper.TABLE_MARQUEUR+"."+MySQLiteHelper.COLUMN_LIEUID+";";
 
     /**
      * renvoie un cursor de l'historique des marqueurs contenant le nom du lieu, l'adresse et la date de saisie

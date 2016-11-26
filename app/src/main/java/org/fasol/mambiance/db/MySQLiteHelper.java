@@ -66,6 +66,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     //names of the columns of the whole database
 
+    public static final String COLUMN_ID = "_id";
+
     public static final String COLUMN_MARQUEURID = "marqueur_id";
     public static final String COLUMN_DATECREATION = "date_creation";
 
@@ -97,14 +99,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      * upgrading the version force the database to be deleted and recreated
      */
     public static final String DATABASE_NAME = "local.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
 
 
     /**
      * query to create table lieu
      */
     private static final String DATABASE_CREATE = "create table " + TABLE_LIEU + " ("
-            + COLUMN_LIEUID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_LIEUNOM + " text not null, "
             + COLUMN_ADRESSE + " text not null, "
             + COLUMN_LATITUDE + " REAL, "
@@ -115,51 +117,51 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      * query to create table marqueur
      */
     private static final String DATABASE_CREATE2 = "create table " + TABLE_MARQUEUR + " ("
-            + COLUMN_MARQUEURID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_DATECREATION + " DATETIME, "
             + COLUMN_LIEUID + " INTEGER, "
-            + "FOREIGN KEY( " + COLUMN_LIEUID + " )" + " REFERENCES " + TABLE_LIEU + " ( " + COLUMN_LIEUID + " )"
+            + "FOREIGN KEY( " + COLUMN_LIEUID + " )" + " REFERENCES " + TABLE_LIEU + " ( " + COLUMN_ID + " )"
             + "); ";
 
     /**
      * query to create table rose_ambiance
      */
     private static final String DATABASE_CREATE3 = "create table " + TABLE_ROSEAMBIANCE + " ("
-            + COLUMN_ROSEID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_OLFACTORY + " REAL NOT NULL, "
             + COLUMN_VISUAL + " REAL NOT NULL, "
             + COLUMN_THERMAL + " REAL NOT NULL, "
             + COLUMN_ACOUSTICAL + " REAL NOT NULL, "
             + COLUMN_MARQUEURID + " INTEGER, "
-            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_MARQUEURID + " )"
+            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_ID + " )"
             + "); ";
     /**
      * query to create table image
      */
     private static final String DATABASE_CREATE4 = "create table " + TABLE_IMAGE + " ("
-            + COLUMN_IMAGEID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_IMAGEEMP + " TEXT NOT NULL UNIQUE, "
             + COLUMN_MARQUEURID + " INTEGER, "
-            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_MARQUEURID + " )"
+            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_ID + " )"
             + "); ";
     /**
      * query to create table mot
      */
     private static final String DATABASE_CREATE5 = "create table " + TABLE_MOT + " ("
-            + COLUMN_MOTID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_MOTLIBELLE + " TEXT NOT NULL, "
             + COLUMN_MARQUEURID + " INTEGER, "
-            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_MARQUEURID + " )"
+            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_ID + " )"
             + "); ";
     /**
      * query to create table curseur
      */
     private static final String DATABASE_CREATE6 = "create table " + TABLE_CURSEUR + " ("
-            + COLUMN_CURSEURID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_CURSEURLIBELLE + " TEXT NOT NULL, "
             + COLUMN_CURSEURVALEUR + " INTEGER, "
             + COLUMN_MARQUEURID + " INTEGER, "
-            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_MARQUEURID + " )"
+            + "FOREIGN KEY( " + COLUMN_MARQUEURID + " )" + " REFERENCES " + TABLE_MARQUEUR + " ( " + COLUMN_ID + " )"
             + "); ";
 
     /**
