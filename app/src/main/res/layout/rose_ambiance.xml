@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+        <SeekBar
+            android:id="@+id/cursor_olfactory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="20"
+            android:progress="10"
+            android:rotation="270"
+            android:paddingEnd="0dip"
+            android:paddingStart="0dip" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:gravity="center">
+        <SeekBar
+            android:id="@+id/cursor_acoustical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="20"
+            android:progress="5"
+            android:rotation="180"
+            android:layout_weight="1"
+            android:paddingEnd="0dip"
+            android:paddingStart="0dip" />
+        <SeekBar
+            android:id="@+id/cursor_thermal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="20"
+            android:progress="5"
+            android:layout_weight="1"
+            android:paddingEnd="0dip"
+            android:paddingStart="0dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+        <SeekBar
+            android:id="@+id/cursor_visual"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="20"
+            android:progress="10"
+            android:rotation="90"
+            android:layout_weight="0.5"
+            android:paddingEnd="0dip"
+            android:paddingStart="0dip" />
+     </LinearLayout>
+
+</LinearLayout>

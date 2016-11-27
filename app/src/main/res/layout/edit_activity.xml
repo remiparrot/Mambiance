@@ -85,12 +85,19 @@
                 android:layout_weight="1"/>
         </LinearLayout>
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/rose_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/rose_ambiances"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5" />-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+            <include layout="@layout/rose_ambiance"/>
+        </FrameLayout>
+
     </LinearLayout>
 
     <LinearLayout
