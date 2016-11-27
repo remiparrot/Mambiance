@@ -92,10 +92,13 @@
             android:src="@drawable/rose_ambiances"
             android:layout_weight="0.5" />-->
         <FrameLayout
+            android:id="@+id/frame_layout_rose"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5">
-            <include layout="@layout/rose_ambiance"/>
+
+            <include layout="@layout/rose_ambiance"
+                android:id="@+id/rose_ambiance_curseurs"/>
         </FrameLayout>
 
     </LinearLayout>

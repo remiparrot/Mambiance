@@ -1,63 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
     <LinearLayout
+        android:id="@+id/linear_layout_curseur_o"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="0.25">
         <SeekBar
             android:id="@+id/cursor_olfactory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:max="20"
-            android:progress="10"
+            android:max="10"
+            android:progress="5"
             android:rotation="270"
-            android:paddingEnd="0dip"
-            android:paddingStart="0dip" />
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.9"
-        android:gravity="center">
-        <SeekBar
-            android:id="@+id/cursor_acoustical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="20"
-            android:progress="5"
-            android:rotation="180"
-            android:layout_weight="1"
-            android:paddingEnd="0dip"
-            android:paddingStart="0dip" />
-        <SeekBar
-            android:id="@+id/cursor_thermal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="20"
-            android:progress="5"
-            android:layout_weight="1"
-            android:paddingEnd="0dip"
-            android:paddingStart="0dip" />
+            android:progressTint="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            android:thumbTint="@color/transparent"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_layout_curseurs_a_t"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5">
+        android:gravity="center"
+        android:layout_weight="0.45">
+        <SeekBar
+            android:id="@+id/cursor_acoustical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="10"
+            android:progress="5"
+            android:rotation="180"
+            android:layout_weight="0.5"
+            android:progressTint="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            android:thumbTint="@color/transparent"/>
+        <SeekBar
+            android:id="@+id/cursor_thermal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="10"
+            android:progress="5"
+            android:layout_weight="0.5"
+            android:progressTint="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            android:thumbTint="@color/transparent"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_curseur_v"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="0.25">
         <SeekBar
             android:id="@+id/cursor_visual"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:max="20"
-            android:progress="10"
+            android:max="10"
+            android:progress="5"
             android:rotation="90"
-            android:layout_weight="0.5"
-            android:paddingEnd="0dip"
-            android:paddingStart="0dip" />
-     </LinearLayout>
+            android:layout_gravity="center_horizontal"
+            android:progressTint="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            android:thumbTint="@color/transparent" />
+    </LinearLayout>
 
 </LinearLayout>
