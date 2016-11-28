@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,16 +11,12 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_weight="0.25">
-        <SeekBar
+        <org.fasol.mambiance.VerticalSeekBar
             android:id="@+id/cursor_olfactory"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:max="10"
-            android:progress="5"
-            android:rotation="270"
-            android:progressTint="@color/transparent"
-            android:backgroundTint="@color/transparent"
-            android:thumbTint="@color/transparent"/>
+            android:progress="5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -34,24 +29,18 @@
         <SeekBar
             android:id="@+id/cursor_acoustical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:max="10"
             android:progress="5"
             android:rotation="180"
-            android:layout_weight="0.5"
-            android:progressTint="@color/transparent"
-            android:backgroundTint="@color/transparent"
-            android:thumbTint="@color/transparent"/>
+            android:layout_weight="0.5"/>
         <SeekBar
             android:id="@+id/cursor_thermal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:max="10"
             android:progress="5"
-            android:layout_weight="0.5"
-            android:progressTint="@color/transparent"
-            android:backgroundTint="@color/transparent"
-            android:thumbTint="@color/transparent"/>
+            android:layout_weight="0.5"/>
     </LinearLayout>
 
     <LinearLayout
@@ -61,17 +50,14 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_weight="0.25">
-        <SeekBar
+        <org.fasol.mambiance.VerticalSeekBar
             android:id="@+id/cursor_visual"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:max="10"
             android:progress="5"
-            android:rotation="90"
-            android:layout_gravity="center_horizontal"
-            android:progressTint="@color/transparent"
-            android:backgroundTint="@color/transparent"
-            android:thumbTint="@color/transparent" />
+            android:rotation="180"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
 </LinearLayout>

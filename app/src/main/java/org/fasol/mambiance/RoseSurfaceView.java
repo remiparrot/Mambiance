@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -24,7 +25,9 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     Paint mPaint;
 
     SeekBar o,t,v,a;
-    FrameLayout frame_layout;
+
+    Resources res;
+    float paddX,paddY;
 
     /**
      * Constructeur utilisé pour inflater avec un style
@@ -46,6 +49,8 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public RoseSurfaceView(Context context, SeekBar o, SeekBar t, SeekBar v, SeekBar a) {
         super(context);
 
+        res = context.getResources();
+
         mSurfaceHolder = getHolder();
         mSurfaceHolder.addCallback(this);
 
@@ -60,6 +65,8 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         this.t=t;
         this.v=v;
 
+        paddX=res.getDimension(R.dimen.activity_horizontal_margin);
+        paddY=res.getDimension(R.dimen.activity_vertical_margin);
     }
 
 
@@ -67,27 +74,67 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     protected void onDraw(Canvas pCanvas) {
 
         pCanvas.drawColor(Color.WHITE);
+        mPaint.setColor(Color.BLACK);
 
-        // trace axe
-        mPaint.setStrokeWidth(2);
-        pCanvas.drawLine(this.getX()+this.getWidth()/2, this.getY(),this.getX()+this.getWidth()/2,this.getY()+this.getHeight(),mPaint);
-        pCanvas.drawLine(this.getX(), this.getY()+this.getHeight()/2,this.getX()+this.getWidth(),this.getY()+this.getHeight()/2,mPaint);
+        // écrit textes axes
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setTextSize(2*paddY/3);
+        pCanvas.drawText("Olfactory",this.getX()+this.getWidth()/2-paddX,this.getY()-paddY/3,mPaint);
+        pCanvas.save();
+        pCanvas.rotate(90f,this.getX()+this.getWidth()-2*paddX + paddY/3, this.getY()+this.getHeight()/2-paddY);
+        pCanvas.drawText("Thermal",this.getX()+this.getWidth()-2*paddX + paddY/3, this.getY()+this.getHeight()/2-paddY, mPaint);
+        pCanvas.restore();
+        pCanvas.drawText("Visual",this.getX()+this.getWidth()/2-paddX, this.getY()+this.getHeight()-4*paddY/3,mPaint);
+        pCanvas.save();
+        pCanvas.rotate(-90f, this.getX()-paddY/3, this.getY()+this.getHeight()/2-paddY);
+        pCanvas.drawText("Acoustical", this.getX()-paddY/3, this.getY()+this.getHeight()/2-paddY, mPaint);
+        pCanvas.restore();
+
+        // calcul position rose
+        float oThumbPosX = (this.getWidth()/2) + this.getX() - paddX;
+        float oThumbPosY = (this.getHeight()/2) + this.getY() -paddY - (this.getHeight()/2-paddY) * o.getProgress() / o.getMax();
+        float tThumbPosX = (this.getWidth()/2) + this.getX() - paddX + (this.getWidth()/2-paddX) * t.getProgress() / t.getMax();
+        float tThumbPosY = (this.getHeight()/2) + this.getY() - paddY;
+        float vThumbPosX = (this.getWidth()/2) + this.getX() - paddX;
+        float vThumbPosY = (this.getHeight()/2) + this.getY() - paddY + (this.getHeight()/2-paddY) * v.getProgress() / v.getMax();
+        float aThumbPosX = (this.getWidth()/2) + this.getX() - paddX - (this.getWidth()/2-paddX) * a.getProgress() / a.getMax();
+        float aThumbPosY = (this.getHeight()/2) + this.getY() - paddY;
+
+        Path p = new Path();
+        p.moveTo(oThumbPosX,oThumbPosY);
+        p.lineTo(tThumbPosX,tThumbPosY);
+        p.lineTo(vThumbPosX,vThumbPosY);
+        p.lineTo(aThumbPosX,aThumbPosY);
+        p.lineTo(oThumbPosX,oThumbPosY);
+
+        // rempli rose
+        mPaint.setColor(Color.LTGRAY);
+        pCanvas.drawPath(p,mPaint);
+
+        //écrit échelle axe
+        mPaint.setTextAlign(Paint.Align.RIGHT);
+        mPaint.setColor(Color.BLACK);
+        float echelle=1.0f;
+        for(int i=0;i<5;i++){
+            pCanvas.drawText(String.valueOf(echelle), this.getX()+this.getWidth()/2-paddY, this.getY()+i*this.getHeight()/9+2*paddY/3, mPaint);
+            echelle-=0.5;
+        }
 
         // trace rose
-        mPaint.setStrokeWidth(3);
-        float oThumbPosX = (this.getWidth()/2) + this.getX();
-        float oThumbPosY = (this.getHeight()/2) + this.getY() - (this.getHeight()/2) * o.getProgress() / o.getMax();
-        float tThumbPosX = (this.getWidth()/2) + this.getX() + (this.getWidth()/2) * t.getProgress() / t.getMax();
-        float tThumbPosY = (this.getHeight()/2) + this.getY();
-        float vThumbPosX = (this.getWidth()/2) + this.getX();
-        float vThumbPosY = (this.getHeight()/2) + this.getY() + (this.getHeight()/2) * v.getProgress() / v.getMax();
-        float aThumbPosX = (this.getWidth()/2) + this.getX() - (this.getWidth()/2) * a.getProgress() / a.getMax();
-        float aThumbPosY = (this.getHeight()/2) + this.getY();
-        
+        mPaint.setStrokeWidth(4);
+        mPaint.setColor(Color.BLACK);
         pCanvas.drawLine(oThumbPosX,oThumbPosY,tThumbPosX,tThumbPosY,mPaint);
         pCanvas.drawLine(tThumbPosX,tThumbPosY,vThumbPosX,vThumbPosY,mPaint);
         pCanvas.drawLine(vThumbPosX,vThumbPosY,aThumbPosX,aThumbPosY,mPaint);
         pCanvas.drawLine(aThumbPosX,aThumbPosY,oThumbPosX,oThumbPosY,mPaint);
+
+        // trace axe
+        mPaint.setStrokeWidth(2);
+        mPaint.setColor(Color.BLACK);
+        pCanvas.drawLine(this.getX()+this.getWidth()/2-paddX, this.getY(),
+                this.getX()+this.getWidth()/2-paddX, this.getY()+this.getHeight()-2*paddY, mPaint);
+        pCanvas.drawLine(this.getX(), this.getY()+this.getHeight()/2-paddY,
+                this.getX()+this.getWidth()-2*paddX, this.getY()+this.getHeight()/2-paddY, mPaint);
 
         super.onDraw(pCanvas);
     }
