@@ -32,7 +32,7 @@ public class EditActivity extends AppCompatActivity {
 
         layout_rose.addView(new RoseSurfaceView(this,(SeekBar)findViewById(R.id.cursor_olfactory)
                 ,(SeekBar)findViewById(R.id.cursor_thermal),(SeekBar)findViewById(R.id.cursor_visual)
-                ,(SeekBar)findViewById(R.id.cursor_acoustical)), 0);
+                ,(SeekBar)findViewById(R.id.cursor_acoustical)));
     }
 
     /**
