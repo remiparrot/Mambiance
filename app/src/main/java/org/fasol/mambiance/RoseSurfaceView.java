@@ -73,6 +73,8 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     protected void onDraw(Canvas pCanvas) {
 
+        super.onDraw(pCanvas);
+
         pCanvas.drawColor(Color.WHITE);
         mPaint.setColor(Color.BLACK);
 
@@ -136,7 +138,6 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         pCanvas.drawLine(this.getX(), this.getY()+this.getHeight()/2-paddY,
                 this.getX()+this.getWidth()-2*paddX, this.getY()+this.getHeight()/2-paddY, mPaint);
 
-        super.onDraw(pCanvas);
     }
 
     @Override
