@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -21,6 +24,9 @@ import android.widget.SeekBar;
 
 public class EditActivity extends AppCompatActivity {
 
+    // --------------------------------     Crée toutes les variables
+    EditText site_name;
+    Button save;
 
     FrameLayout layout_rose;
     @Override
@@ -33,7 +39,21 @@ public class EditActivity extends AppCompatActivity {
         layout_rose.addView(new RoseSurfaceView(this,(SeekBar)findViewById(R.id.cursor_olfactory)
                 ,(SeekBar)findViewById(R.id.cursor_thermal),(SeekBar)findViewById(R.id.cursor_visual)
                 ,(SeekBar)findViewById(R.id.cursor_acoustical)));
+
+        // ----------------------------------         associe toutes les variables
+        site_name=(EditText)findViewById(R.id.edit_site_name);
+        save=(Button)findViewById(R.id.btn_save);
+
+        // click listener
+        save.setOnClickListener(saveListener);
     }
+
+    private View.OnClickListener saveListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // ----------------            requête pour enregistrer dans la BDD
+        }
+    };
 
     /**
      * Method to inflate the xml menu file
