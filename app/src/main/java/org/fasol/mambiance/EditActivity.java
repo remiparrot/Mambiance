@@ -24,9 +24,18 @@ import android.widget.SeekBar;
 
 public class EditActivity extends AppCompatActivity {
 
-    // --------------------------------     Crée toutes les variables
     EditText site_name;
+    EditText description;
+    SeekBar cursor1;
+    SeekBar cursor2;
+    SeekBar cursor3;
+    SeekBar cursor_acoustical;
+    SeekBar cursor_thermal;
+    SeekBar cursor_olfactory;
+    SeekBar cursor_visual;
+
     Button save;
+
 
     FrameLayout layout_rose;
     @Override
@@ -40,11 +49,22 @@ public class EditActivity extends AppCompatActivity {
                 ,(SeekBar)findViewById(R.id.cursor_thermal),(SeekBar)findViewById(R.id.cursor_visual)
                 ,(SeekBar)findViewById(R.id.cursor_acoustical)));
 
-        // ----------------------------------         associe toutes les variables
+
         site_name=(EditText)findViewById(R.id.edit_site_name);
+        description=(EditText)findViewById(R.id.edit_description);
+
+        cursor1=(SeekBar) findViewById(R.id.cursor1);
+        cursor2=(SeekBar) findViewById(R.id.cursor2);
+        cursor3=(SeekBar) findViewById(R.id.cursor3);
+
+        cursor_acoustical=(SeekBar) findViewById(R.id.cursor_acoustical);
+        cursor_thermal=(SeekBar) findViewById(R.id.cursor_thermal);
+        cursor_olfactory=(SeekBar) findViewById(R.id.cursor_olfactory);
+        cursor_visual=(SeekBar) findViewById(R.id.cursor_visual);
+
         save=(Button)findViewById(R.id.btn_save);
 
-        // click listener
+
         save.setOnClickListener(saveListener);
     }
 
