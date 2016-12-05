@@ -85,7 +85,7 @@ public class Image extends DataObject {
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, this.marqueur_id);
 
         if(this.registredInLocal){
-            String str = "image_id "+"="+this.image_id;
+            String str = "_id "+"="+this.image_id;
             datasource.getDatabase().update(MySQLiteHelper.TABLE_IMAGE, values, str, null);
         }
         else{

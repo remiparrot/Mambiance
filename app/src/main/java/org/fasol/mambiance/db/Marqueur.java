@@ -95,7 +95,7 @@ public class Marqueur extends DataObject {
 		values.put(MySQLiteHelper.COLUMN_DATECREATION, this.date_creation.toString());
 
 		if(this.registredInLocal){
-			String str = "marqueur_id "+"="+this.marqueur_id;
+			String str = "_id "+"="+this.marqueur_id;
 			datasource.getDatabase().update(MySQLiteHelper.TABLE_MARQUEUR, values, str, null);
 		}
 		else{

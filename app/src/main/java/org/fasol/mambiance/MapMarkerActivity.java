@@ -1,22 +1,22 @@
 package org.fasol.mambiance;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -24,22 +24,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.MapEventsOverlay;
-import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-import org.osmdroid.views.util.constants.MapViewConstants;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by fasol on 18/11/16.
@@ -47,7 +34,7 @@ import java.util.Map;
 
 // TODO geolocalisation
 
-public class MapMarkerActivity extends AppCompatActivity implements MapEventsReceiver,MapViewConstants{
+public class MapMarkerActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     /**
      * Vue pour la carte
@@ -58,12 +45,21 @@ public class MapMarkerActivity extends AppCompatActivity implements MapEventsRec
 
     private MyLocationNewOverlay mLocationOverlay;
 
+    private Location mLastLocation;
+
     private RotationGestureOverlay mRotationGestureOverlay;
 
     private ItemizedIconOverlay currentLocationOverlay;
 
+    private GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Create an instance of GoogleAPIClient.
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
+        }
 
         org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
 
@@ -88,6 +84,7 @@ public class MapMarkerActivity extends AppCompatActivity implements MapEventsRec
         mLocationOverlay.enableMyLocation();
         mLocationOverlay.enableFollowLocation();
 
+
         mMapView.invalidate();
 
         /*MarkerOverlay markerOverlay = new MarkerOverlay(getDrawable(R.drawable.center));
@@ -102,9 +99,22 @@ public class MapMarkerActivity extends AppCompatActivity implements MapEventsRec
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
 
     /**
      * Method to inflate the xml menu file
@@ -112,7 +122,7 @@ public class MapMarkerActivity extends AppCompatActivity implements MapEventsRec
      * @return true if everything went good
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
         //On sérialise le fichier menu.xml pour l'afficher dans la barre de menu
@@ -131,7 +141,7 @@ public class MapMarkerActivity extends AppCompatActivity implements MapEventsRec
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intent ;
+        Intent intent;
 
         switch (item.getItemId()) {
             case R.id.home:
@@ -163,13 +173,31 @@ public class MapMarkerActivity extends AppCompatActivity implements MapEventsRec
     }
 
     @Override
-    public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
-        return false;
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            Toast.makeText(this,String.valueOf(mLastLocation.getLatitude()),Toast.LENGTH_LONG);
+        }
+
     }
 
     @Override
-    public boolean longPressHelper(GeoPoint geoPoint) {
-        return false;
+    public void onConnectionSuspended(int i) {
+
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 }

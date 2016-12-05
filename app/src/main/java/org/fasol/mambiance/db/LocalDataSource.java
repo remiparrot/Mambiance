@@ -1,5 +1,6 @@
 package org.fasol.mambiance.db;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -164,12 +165,18 @@ public class LocalDataSource {
      * @param cursor
      * @return Marqueur linked to the cursor
      */
-    private Marqueur cursorToMarqueur(Cursor cursor) {
+    private Marqueur cursorToMarqueur(Cursor cursor){
         Marqueur marqueur = new Marqueur();
 
         marqueur.setMarqueur_id(cursor.getLong(0));
 
-        Date dateCreation = new Date(cursor.getLong(1) * 1000);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date dateCreation = null;
+        try {
+            dateCreation = dateFormat.parse(cursor.getString(1));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         marqueur.setDate_creation(dateCreation);
 
         marqueur.setLieu_id(cursor.getLong(2));
@@ -372,6 +379,19 @@ public class LocalDataSource {
     }
 
     /**
+     * knowing a Marquer_id, we want to get the image itself
+     * @param id is the id of the Marqueur we are looking for
+     * @return i1 is the Image we were looking for
+     */
+    public Image getImageWithMarqueurId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_IMAGE, allColumnsImage, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        Image i1 = cursorToImage(c);
+        c.close();
+        return i1;
+    }
+
+    /**
      * knowing a image emplacement, we want to get the image itself
      * @param img_emp image emplacement
      * @return i1 is the image we were looking for
@@ -509,6 +529,23 @@ public class LocalDataSource {
     }
 
     /**
+     * knowing a Marqueur_id, we want to get the mot itself
+     * @param id is the id of the Marqueur we are looking for
+     * @return l_curseur is the list of Curseur we were looking for
+     */
+    public ArrayList<Curseur> getCurseurWithMarqueurId(long id){
+        ArrayList<Curseur> l_curseur=new ArrayList<Curseur>();
+        Cursor c = database.query(MySQLiteHelper.TABLE_CURSEUR, allColumnsCurseur, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        for(int i=0; i<c.getCount();i++){
+            l_curseur.add(cursorToCurseur(c));
+            c.moveToNext();
+        }
+        c.close();
+        return l_curseur;
+    }
+
+    /**
      * knowing an curseur id we test if this Curseur exists
      * @param id curseur id
      * @return boolean says if the Curseur with this id exists or not
@@ -609,6 +646,23 @@ public class LocalDataSource {
         Mot m1 = cursorToMot(c);
         c.close();
         return m1;
+    }
+
+    /**
+     * knowing a Marqueur_id, we want to get the mot itself
+     * @param id is the id of the Marqueur we are looking for
+     * @return m1 is the Mot we were looking for
+     */
+    public ArrayList<Mot> getMotWithMarqueurId(long id){
+        ArrayList<Mot> l_mot=new ArrayList<Mot>();
+        Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        for(int i=0; i<c.getCount();i++){
+            c.move(i);
+            l_mot.add(cursorToMot(c));
+        }
+        c.close();
+        return l_mot;
     }
 
     /**
@@ -723,6 +777,19 @@ public class LocalDataSource {
     }
 
     /**
+     * knowing a Marqueur_id, we want to get the rose itself
+     * @param id is the id of the Marqueur we are looking for
+     * @return m1 is the RoseAmbiance we were looking for
+     */
+    public RoseAmbiance getRoseAmbianceWithMarqueurId(long id){
+        Cursor c = database.query(MySQLiteHelper.TABLE_ROSEAMBIANCE, allColumnsRoseAmbiance, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id +"\"", null, null, null, null);
+        c.moveToFirst();
+        RoseAmbiance m1 = cursorToRoseAmbiance(c);
+        c.close();
+        return m1;
+    }
+
+    /**
      * knowing an rose id we test if this RoseAmbiance exists
      * @param id rose id
      * @return boolean says if the RoseAmbiance with this id exists or not
@@ -757,7 +824,7 @@ public class LocalDataSource {
      */
     public void clearRoseAmbiance(){
         System.out.println("RoseAmbiance cleared");
-        database.execSQL("DROP TABLE IF EXISTS RoseAmbiance");
+        database.execSQL("DROP TABLE IF EXISTS Rose_ambiance");
         database.execSQL(MySQLiteHelper.getDatabaseCreate3());
     }
 

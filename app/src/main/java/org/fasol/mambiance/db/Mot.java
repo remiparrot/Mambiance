@@ -83,7 +83,7 @@ public class Mot extends DataObject {
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, this.marqueur_id);
 
         if(this.registredInLocal){
-            String str = "mot_id "+"="+this.mot_id;
+            String str = "_id "+"="+this.mot_id;
             datasource.getDatabase().update(MySQLiteHelper.TABLE_MOT, values, str, null);
         }
         else{

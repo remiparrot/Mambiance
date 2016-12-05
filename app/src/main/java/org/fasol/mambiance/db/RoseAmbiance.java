@@ -137,7 +137,7 @@ public class RoseAmbiance extends DataObject {
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, this.marqueur_id);
 
         if(this.registredInLocal){
-            String str = "rose_ambiance_id "+"="+this.rose_ambiance_id;
+            String str = "_id "+"="+this.rose_ambiance_id;
             datasource.getDatabase().update(MySQLiteHelper.TABLE_ROSEAMBIANCE, values, str, null);
         }
         else{

@@ -13,31 +13,43 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 /**
  * Created by fasol on 18/11/16.
  */
 
 // TODO récupérer les données saisies
+    // TODO sélection aléatoire des adjectifs
     // TODO lier l'application appareil photo au bouton
     // TODO enregistrer les données dans la BDD
 
 public class EditActivity extends AppCompatActivity {
 
-    EditText site_name;
-    EditText description;
-    SeekBar cursor1;
-    SeekBar cursor2;
-    SeekBar cursor3;
-    SeekBar cursor_acoustical;
-    SeekBar cursor_thermal;
-    SeekBar cursor_olfactory;
-    SeekBar cursor_visual;
+    // liste des caractéristiques possibles
+    public final static String[] l_caract = {"Cozy", "Palpitant", "Formel", "Accueillant", "Sécurisant", "Inspirant", "Intime", "Animé",
+            "Luxueux", "Chill", "Personnel", "Romantique", "Ennuyeux", "Chaleureux", "Business", "Reposant"};
 
-    Button save;
+    // champs à remplir
+    private EditText site_name;
+    private EditText description;
+    private TextView caract1;
+    private TextView caract2;
+    private TextView caract3;
+    private SeekBar cursor1;
+    private SeekBar cursor2;
+    private SeekBar cursor3;
+    private SeekBar cursor_acoustical;
+    private SeekBar cursor_thermal;
+    private SeekBar cursor_olfactory;
+    private SeekBar cursor_visual;
 
+    // bouton pour écrire dans la BDD
+    private Button save;
 
-    FrameLayout layout_rose;
+    // layout contenant la rose des ambiances
+    private FrameLayout layout_rose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +65,10 @@ public class EditActivity extends AppCompatActivity {
         site_name=(EditText)findViewById(R.id.edit_site_name);
         description=(EditText)findViewById(R.id.edit_description);
 
+        caract1=(TextView)findViewById(R.id.caract1);
+        caract2=(TextView)findViewById(R.id.caract2);
+        caract3=(TextView)findViewById(R.id.caract3);
+
         cursor1=(SeekBar) findViewById(R.id.cursor1);
         cursor2=(SeekBar) findViewById(R.id.cursor2);
         cursor3=(SeekBar) findViewById(R.id.cursor3);
@@ -61,6 +77,11 @@ public class EditActivity extends AppCompatActivity {
         cursor_thermal=(SeekBar) findViewById(R.id.cursor_thermal);
         cursor_olfactory=(SeekBar) findViewById(R.id.cursor_olfactory);
         cursor_visual=(SeekBar) findViewById(R.id.cursor_visual);
+
+        cursor_acoustical.setEnabled(true);
+        cursor_thermal.setEnabled(true);
+        cursor_olfactory.setEnabled(true);
+        cursor_visual.setEnabled(true);
 
         save=(Button)findViewById(R.id.btn_save);
 

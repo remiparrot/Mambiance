@@ -13,9 +13,13 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import org.fasol.mambiance.db.Curseur;
+import org.fasol.mambiance.db.Image;
 import org.fasol.mambiance.db.Lieu;
 import org.fasol.mambiance.db.LocalDataSource;
 import org.fasol.mambiance.db.Marqueur;
+import org.fasol.mambiance.db.Mot;
+import org.fasol.mambiance.db.RoseAmbiance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +41,23 @@ public class MainActivity extends AppCompatActivity {
         datasource.open();
 
         // test ajout dans la BDD
-        Lieu l = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0.0f,0.0f);
-        Marqueur m = datasource.createMarqueur(l.getLieu_id());
+        datasource.clearLieu();
+        datasource.clearMarqueur();
+        datasource.clearCurseur();
+        datasource.clearImage();
+        datasource.clearMot();
+        datasource.clearRoseAmbiance();
+
+        Lieu lieu = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0.0f,0.0f);
+        Marqueur marqueur = datasource.createMarqueur(lieu.getLieu_id());
+        RoseAmbiance rose = datasource.createRoseAmbiance(.5f,-1.0f,.25f,.0f,marqueur.getMarqueur_id());
+        Image image = datasource.createImage(marqueur.getMarqueur_id(), "drawable://parc_photo");
+        Mot mot = datasource.createMot("pouet",marqueur.getMarqueur_id());
+        Curseur c1 = datasource.createCurseur("Cozy", 2, marqueur.getMarqueur_id());
+        Curseur c2 = datasource.createCurseur("Palpitant", 5, marqueur.getMarqueur_id());
+        Curseur c3 = datasource.createCurseur("Formel", 8, marqueur.getMarqueur_id());
+
+        datasource.close();
 
         btn_user=(ImageButton)findViewById(R.id.btn_user);
         btn_edit=(ImageButton)findViewById(R.id.btn_edit);
@@ -122,60 +141,4 @@ public class MainActivity extends AppCompatActivity {
         datasource.close();
     }
 
-    // START PERMISSION CHECK
-    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
-
-    private void checkPermissions() {
-        List<String> permissions = new ArrayList<>();
-        String message = "osmdroid permissions:";
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            message += "\nLocation to show user location.";
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            message += "\nStorage access to store map tiles.";
-        }
-        if (!permissions.isEmpty()) {
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-            String[] params = permissions.toArray(new String[permissions.size()]);
-            requestPermissions(params, REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
-        } // else: We already have permissions, so handle as normal
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
-                Map<String, Integer> perms = new HashMap<>();
-                // Initial
-                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
-                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
-                // Fill with results
-                for (int i = 0; i < permissions.length; i++)
-                    perms.put(permissions[i], grantResults[i]);
-                // Check for ACCESS_FINE_LOCATION and WRITE_EXTERNAL_STORAGE
-                Boolean location = perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-                Boolean storage = perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-                if (location && storage) {
-                    // All Permissions Granted
-                    Toast.makeText(MainActivity.this, "All permissions granted", Toast.LENGTH_SHORT).show();
-                } else if (location) {
-                    Toast.makeText(this, "Storage permission is required to store map tiles to reduce data usage and for offline usage.", Toast.LENGTH_LONG).show();
-                } else if (storage) {
-                    Toast.makeText(this, "Location permission is required to show the user's location on map.", Toast.LENGTH_LONG).show();
-                } else { // !location && !storage case
-                    // Permission Denied
-                    Toast.makeText(MainActivity.this, "Storage permission is required to store map tiles to reduce data usage and for offline usage." +
-                            "\nLocation permission is required to show the user's location on map.", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-            break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    // END PERMISSION CHECK
 }
