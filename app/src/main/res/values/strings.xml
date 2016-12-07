@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mambiance</string>
-    <string name="site_name">Nom du Lieu</string>
+    <string name="site_name">Nom du Lieu : </string>
     <string name="evaluate">Evaluation</string>
-    <string name="description">Description</string>
+    <string name="description">Description : </string>
     <string name="save">Enregistrer</string>
 </resources>

@@ -109,15 +109,15 @@ public class EditActivity extends AppCompatActivity {
         int rand=rd.nextInt(caract_pos.size());
         int caract_sel=caract_pos.get(rand);
         caract1.setText(l_caract[caract_sel]);
-        caract_pos.remove(rd);
+        caract_pos.remove(rand);
         rand=rd.nextInt(caract_pos.size());
         caract_sel=caract_pos.get(rand);
         caract2.setText(l_caract[caract_sel]);
-        caract_pos.remove(rd);
+        caract_pos.remove(rand);
         rand=rd.nextInt(caract_pos.size());
         caract_sel=caract_pos.get(rand);
         caract3.setText(l_caract[caract_sel]);
-        caract_pos.remove(rd);
+        caract_pos.remove(rand);
 
         // ajout d'un clicklistener sur les boutons
         btn_photo.setOnClickListener(photoListener);

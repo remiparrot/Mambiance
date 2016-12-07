@@ -17,13 +17,17 @@
         android:layout_height="match_parent"
         android:text="Nom du Lieu"
         android:textAlignment="center"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:textSize="30sp"
+        android:fontFamily="sans-serif"
+        android:textAllCaps="true"
+        android:textStyle="normal|bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="0.1">
+        android:layout_weight="0.15">
 
         <LinearLayout
             android:id="@+id/form_cursor"
@@ -42,15 +46,18 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.7"
                     android:text="@string/description"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold"/>
 
                 <TextView
                     android:id="@+id/description_display"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.2" />
+                    android:layout_weight="0.3"
+                    android:textSize="24sp"/>
             </LinearLayout>
 
             <ImageView
@@ -69,6 +76,15 @@
             android:layout_weight="0.5"
             android:paddingLeft="@dimen/activity_horizontal_margin">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/evaluate"
+                android:layout_weight="0.5"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold"/>
+
             <FrameLayout
                 android:id="@+id/frame_layout_rose_display"
                 android:layout_width="match_parent"
@@ -84,17 +100,13 @@
             </FrameLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/evaluate"
-                android:layout_weight="0.5"/>
-            <TextView
                 android:id="@+id/caract1_display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="adjectif 1"
                 android:layout_weight="0.1"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="18sp"/>
             <SeekBar
                 android:id="@+id/cursor1_display"
                 android:layout_width="match_parent"
@@ -108,7 +120,8 @@
                 android:layout_height="wrap_content"
                 android:text="adjectif 2"
                 android:layout_weight="0.1"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="18sp"/>
             <SeekBar
                 android:id="@+id/cursor2_display"
                 android:layout_width="match_parent"
@@ -122,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:text="adjectif 3"
                 android:layout_weight="0.1"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:textSize="18sp"/>
             <SeekBar
                 android:id="@+id/cursor3_display"
                 android:layout_width="match_parent"

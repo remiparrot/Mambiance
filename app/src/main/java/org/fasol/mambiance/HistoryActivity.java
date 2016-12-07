@@ -56,7 +56,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Intent displayActiv = new Intent(HistoryActivity.this, DisplayMarkerActivity.class);
 
                 LinearLayout l_item = (LinearLayout)v_item;
-                TextView marqueur_id = (TextView)l_item.getChildAt(3);
+                TextView marqueur_id = (TextView)l_item.getChildAt(2);
 
                 displayActiv.putExtra("marqueur_id_select", Long.parseLong((String)marqueur_id.getText()));
                 startActivity(displayActiv);
