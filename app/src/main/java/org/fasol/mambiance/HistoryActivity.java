@@ -62,7 +62,7 @@ public class HistoryActivity extends AppCompatActivity {
                 startActivity(displayActiv);
             }
         });
-        // --------------------- FIN DU TEST ---------------------
+        
     }
 
     /**

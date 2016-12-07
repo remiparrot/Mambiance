@@ -24,8 +24,6 @@ import static org.fasol.mambiance.MainActivity.datasource;
  * Created by fasol on 18/11/16.
  */
 
-//TODO envoyer le marqueur en paramètre lors du changement d'activité
-    //TODO récupérer les infos à afficher dans la BDD
 
 public class DisplayMarkerActivity extends AppCompatActivity {
 
@@ -133,7 +131,9 @@ public class DisplayMarkerActivity extends AppCompatActivity {
         cursor_thermal.setProgress((int)((roseAmbiance.getT()+1.f)*4.f));
         cursor_visual.setProgress((int)((roseAmbiance.getV()+1.f)*4.f));
 
-        photo.setImageResource(R.drawable.parc_photo);//Drawable(Drawable.createFromPath(image.getImage_emp()));
+        //TODO récupérer chemin vers photo
+        //photo.setImageDrawable(Drawable.createFromPath(image.getImage_emp()));
+        photo.setImageResource(R.drawable.parc_photo);
 
     }
 
