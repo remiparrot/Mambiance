@@ -29,5 +29,4 @@ dependencies {
     compile 'org.osmdroid:osmdroid-android:5.5:release@aar'
     compile 'org.osmdroid:osmdroid-third-party:5.5:release@aar'
     compile 'org.slf4j:slf4j-api:1.7.7@jar'
-    compile 'com.google.android.gms:play-services:10.0.1'
 }

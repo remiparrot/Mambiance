@@ -1,32 +1,30 @@
 package org.fasol.mambiance;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.gestures.RotationGestureDetector;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static org.fasol.mambiance.MainActivity.datasource;
 
 /**
  * Created by fasol on 18/11/16.
@@ -34,7 +32,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 // TODO geolocalisation
 
-public class MapMarkerActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MapMarkerActivity extends AppCompatActivity{
 
     /**
      * Vue pour la carte
@@ -45,21 +43,13 @@ public class MapMarkerActivity extends AppCompatActivity implements GoogleApiCli
 
     private MyLocationNewOverlay mLocationOverlay;
 
-    private Location mLastLocation;
+    private ArrayList<OverlayItem> mMarkerOverlay;
 
-    private RotationGestureOverlay mRotationGestureOverlay;
+    // private RotationGestureOverlay mRotationGestureOverlay;
 
-    private ItemizedIconOverlay currentLocationOverlay;
-
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
-        }
 
         org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setUserAgentValue(BuildConfig.APPLICATION_ID);
 
@@ -84,12 +74,25 @@ public class MapMarkerActivity extends AppCompatActivity implements GoogleApiCli
         mLocationOverlay.enableMyLocation();
         mLocationOverlay.enableFollowLocation();
 
+        //Affichage marqueurs enregistré dans la BDD
+        mMarkerOverlay=new ArrayList<OverlayItem>();
+        ArrayList<Long> l_marqueurId = new ArrayList<Long>();
 
+        datasource.open();
+        Cursor c = datasource.getAllMarkerMap();
+        c.moveToFirst();
+        for(int i=0;i<c.getCount();i++) {
+            l_marqueurId.add(c.getLong(4));
+            mMarkerOverlay.add(new OverlayItem(c.getString(0), c.getString(1), new GeoPoint(c.getFloat(2), c.getFloat(3))));
+            c.moveToNext();
+        }
+        c.close();
+        datasource.close();
+
+        MarkerIconOverlay mMarkerIconOverlay = new MarkerIconOverlay(mMarkerOverlay,
+                ContextCompat.getDrawable(getApplicationContext(),R.mipmap.ic_map_marker), this, l_marqueurId);
+        this.mMapView.getOverlays().add(mMarkerIconOverlay);
         mMapView.invalidate();
-
-        /*MarkerOverlay markerOverlay = new MarkerOverlay(getDrawable(R.drawable.center));
-        overlays.add(markerOverlay);
-        mMapView.invalidate();*/
 
         // Rotation gestures
         /*mRotationGestureOverlay = new RotationGestureOverlay(this, mMapView);
@@ -100,21 +103,15 @@ public class MapMarkerActivity extends AppCompatActivity implements GoogleApiCli
 
     @Override
     public void onResume() {
+        mLocationOverlay.enableMyLocation();
         super.onResume();
     }
 
     @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
+    protected void onPause() {
+        mLocationOverlay.disableMyLocation();
+        super.onPause();
     }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
 
     /**
      * Method to inflate the xml menu file
@@ -157,47 +154,4 @@ public class MapMarkerActivity extends AppCompatActivity implements GoogleApiCli
         }
     }
 
-    /**
-     * Tracé d'un point p
-     *
-     * @param p Point à tracer
-     */
-    public void drawPoint(GeoPoint p) {
-        Polygon circle = new Polygon(this);
-        circle.setPoints(Polygon.pointsAsCircle(p, 18));
-        circle.setFillColor(Color.YELLOW);
-        circle.setStrokeColor(Color.RED);
-        circle.setStrokeWidth(5);
-        mMapView.getOverlays().add(circle);
-        mMapView.invalidate();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            Toast.makeText(this,String.valueOf(mLastLocation.getLatitude()),Toast.LENGTH_LONG);
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }

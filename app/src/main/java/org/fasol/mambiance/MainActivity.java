@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         datasource.clearMot();
         datasource.clearRoseAmbiance();
 
-        Lieu lieu = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0.0f,0.0f);
+        Lieu lieu = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",48.856667f,2.350833f);
         Marqueur marqueur = datasource.createMarqueur(lieu.getLieu_id());
         RoseAmbiance rose = datasource.createRoseAmbiance(.5f,-1.0f,.25f,.0f,marqueur.getMarqueur_id());
         Image image = datasource.createImage(marqueur.getMarqueur_id(), "drawable://parc_photo");
