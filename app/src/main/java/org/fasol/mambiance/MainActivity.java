@@ -95,6 +95,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent secondeActiv = new Intent(MainActivity.this, InfoActivity.class);
+
+                startActivity(secondeActiv);
+            }
+        });
+
     }
     /**
      * Method to inflate the xml menu file
