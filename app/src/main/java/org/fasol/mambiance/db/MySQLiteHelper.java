@@ -99,7 +99,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      * upgrading the version force the database to be deleted and recreated
      */
     public static final String DATABASE_NAME = "local.db";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
 
 
     /**
@@ -118,7 +118,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
      */
     private static final String DATABASE_CREATE2 = "create table " + TABLE_MARQUEUR + " ("
             + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + COLUMN_DATECREATION + " DATETIME, "
+            + COLUMN_DATECREATION + " DATE, "
             + COLUMN_LIEUID + " INTEGER, "
             + "FOREIGN KEY( " + COLUMN_LIEUID + " )" + " REFERENCES " + TABLE_LIEU + " ( " + COLUMN_ID + " )"
             + "); ";

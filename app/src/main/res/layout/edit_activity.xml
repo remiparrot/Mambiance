@@ -33,62 +33,81 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.8"
-                    android:text="@string/site_name"/>
+                    android:layout_weight="0.7"
+                    android:text="@string/site_name"
+                    android:textSize="24sp" />
                 <EditText
                     android:id="@+id/edit_site_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"/>
+                    android:layout_weight="0.3"
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/evaluate"
-                android:layout_weight="1"/>
-            <TextView
-                android:id="@+id/caract1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="adjectif 1"
-                android:layout_weight="0.3"
-                android:gravity="center_vertical"/>
-            <SeekBar
-                android:id="@+id/cursor1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:max="10"
-                android:progress="0" />
-            <TextView
-                android:id="@+id/caract2"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="adjectif 2"
-                android:layout_weight="0.3"
-                android:gravity="center_vertical"/>
-            <SeekBar
-                android:id="@+id/cursor2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="10"
-                android:progress="0" />
-            <TextView
-                android:id="@+id/caract3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="adjectif 3"
-                android:layout_weight="0.3"
-                android:gravity="center_vertical"/>
-            <SeekBar
-                android:id="@+id/cursor3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:max="10"
-                android:progress="0" />
+                android:orientation="vertical"
+                android:layout_weight="10"
+                android:paddingLeft="@dimen/activity_vertical_margin"
+                android:paddingRight="@dimen/activity_vertical_margin"
+                android:background="@drawable/border">
+
+                <TextView
+                    android:id="@+id/caract1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="adjectif 1"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+                <SeekBar
+                    android:id="@+id/cursor1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5" />
+                <TextView
+                    android:id="@+id/caract2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="adjectif 2"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+                <SeekBar
+                    android:id="@+id/cursor2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5" />
+                <TextView
+                    android:id="@+id/caract3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="adjectif 3"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp" />
+                <SeekBar
+                    android:id="@+id/cursor3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="10"
+                    android:progress="5" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <FrameLayout
@@ -119,20 +138,31 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:text="Photo"
-            android:drawableTop="@mipmap/ic_photo"/>
+            android:drawableTop="@mipmap/ic_photo"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/photo_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_weight="0.7"
             android:text="@string/description"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textSize="24sp" />
 
         <EditText
             android:id="@+id/edit_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2" />
+            android:layout_weight="0.3"
+            android:textSize="24sp"
+            android:hint="mot1, mot2, mot3, ..."/>
     </LinearLayout>
 
     <Button
@@ -140,6 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp" />
 
 </LinearLayout>

@@ -101,7 +101,7 @@ public class Curseur extends DataObject {
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, this.marqueur_id);
 
         if(this.registredInLocal){
-            String str = "curseur_id "+"="+this.curseur_id;
+            String str = "_id "+"="+this.curseur_id;
             datasource.getDatabase().update(MySQLiteHelper.TABLE_CURSEUR, values, str, null);
         }
         else{

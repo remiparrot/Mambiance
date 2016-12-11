@@ -119,7 +119,7 @@ public class Lieu extends DataObject {
         values.put(MySQLiteHelper.COLUMN_ADRESSE, this.adresse);
 
         if(this.registredInLocal){
-            String str = "lieu_id "+"="+this.lieu_id;
+            String str = "_id "+"="+this.lieu_id;
             datasource.getDatabase().update(MySQLiteHelper.TABLE_LIEU, values, str, null);
         }
         else{

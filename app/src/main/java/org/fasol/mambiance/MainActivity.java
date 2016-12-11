@@ -1,6 +1,9 @@
 package org.fasol.mambiance;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,10 +11,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import org.fasol.mambiance.db.Curseur;
+import org.fasol.mambiance.db.Image;
 import org.fasol.mambiance.db.Lieu;
 import org.fasol.mambiance.db.LocalDataSource;
 import org.fasol.mambiance.db.Marqueur;
+import org.fasol.mambiance.db.Mot;
+import org.fasol.mambiance.db.RoseAmbiance;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,9 +40,24 @@ public class MainActivity extends AppCompatActivity {
         datasource = new LocalDataSource(this);
         datasource.open();
 
-        // test ajout dans la BDD
-        Lieu l = datasource.createLieu("Parc à touristes","3 rue du trottoir 44000 NANTES",0.0f,0.0f);
-        Marqueur m = datasource.createMarqueur(l.getLieu_id());
+        // drop tables et test ajout dans la BDD
+        datasource.clearLieu();
+        datasource.clearMarqueur();
+        datasource.clearCurseur();
+        datasource.clearImage();
+        datasource.clearMot();
+        datasource.clearRoseAmbiance();
+
+        /*Lieu lieu = datasource.createLieu("Parc à touristes","3 rue du trottoir 95000 PARIS",48.856667f,2.350833f);
+        Marqueur marqueur = datasource.createMarqueur(lieu.getLieu_id());
+        RoseAmbiance rose = datasource.createRoseAmbiance(.5f,-1.f,.25f,.0f,marqueur.getMarqueur_id());
+        Image image = datasource.createImage(marqueur.getMarqueur_id(), "drawable://parc_photo");
+        Mot mot = datasource.createMot("pouet",marqueur.getMarqueur_id());
+        Curseur c1 = datasource.createCurseur("Cozy", 2, marqueur.getMarqueur_id());
+        Curseur c2 = datasource.createCurseur("Palpitant", 5, marqueur.getMarqueur_id());
+        Curseur c3 = datasource.createCurseur("Formel", 8, marqueur.getMarqueur_id());*/
+
+        datasource.close();
 
         btn_user=(ImageButton)findViewById(R.id.btn_user);
         btn_edit=(ImageButton)findViewById(R.id.btn_edit);
@@ -61,7 +89,16 @@ public class MainActivity extends AppCompatActivity {
         btn_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent secondeActiv = new Intent(MainActivity.this, MapActivity.class);
+                Intent secondeActiv = new Intent(MainActivity.this, MapMarkerActivity.class);
+
+                startActivity(secondeActiv);
+            }
+        });
+
+        btn_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent secondeActiv = new Intent(MainActivity.this, InfoActivity.class);
 
                 startActivity(secondeActiv);
             }
@@ -112,4 +149,5 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         datasource.close();
     }
+
 }

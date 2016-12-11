@@ -19,15 +19,15 @@ import android.widget.SeekBar;
 
 public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    SurfaceHolder mSurfaceHolder;
-    DrawingThread mThread;
+    private SurfaceHolder mSurfaceHolder;
+    private DrawingThread mThread;
 
-    Paint mPaint;
+    private Paint mPaint;
 
-    SeekBar o,t,v,a;
+    private SeekBar o,t,v,a;
 
-    Resources res;
-    float paddX,paddY;
+    private Resources res;
+    private float paddX,paddY;
 
     /**
      * Constructeur utilisé pour inflater avec un style
@@ -141,11 +141,11 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-    }
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) { }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        mThread = new DrawingThread();
         mThread.keepDrawing = true;
         mThread.start();
     }
@@ -179,7 +179,7 @@ public class RoseSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                     // On s'assure qu'aucun autre thread n'accède au holder
                     synchronized (mSurfaceHolder) {
                         // Et on dessine
-                        onDraw(canvas);
+                        if (canvas != null) onDraw(canvas);
                     }
                 } finally {
                     // Notre dessin fini, on relâche le Canvas pour que le dessin s'affiche
