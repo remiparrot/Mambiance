@@ -4,13 +4,19 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -22,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -34,8 +41,11 @@ import org.fasol.mambiance.db.Marqueur;
 import org.fasol.mambiance.db.Mot;
 import org.fasol.mambiance.db.RoseAmbiance;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -45,7 +55,6 @@ import static org.fasol.mambiance.MainActivity.datasource;
  * Created by fasol on 18/11/16.
  */
 
-// TODO récupérer les données saisies
 // TODO lier l'application appareil photo au bouton
 // TODO enregistrer les données dans la BDD
 
@@ -70,6 +79,8 @@ public class EditActivity extends AppCompatActivity implements LocationListener 
     private SeekBar cursor_visual;
     private Button btn_photo;
     private String photo_emp = null;
+
+    private ImageView mPhotoView; //thumbnail photo
 
     // bouton pour écrire dans la BDD
     private Button save;
@@ -119,6 +130,7 @@ public class EditActivity extends AppCompatActivity implements LocationListener 
         cursor_visual.setEnabled(true);
 
         btn_photo = (Button) findViewById(R.id.btn_photo);
+        mPhotoView = (ImageView) findViewById(R.id.photo_thumbnail);
         save = (Button) findViewById(R.id.btn_save);
 
         // sélection des adjectifs aléatoirement
@@ -217,8 +229,8 @@ public class EditActivity extends AppCompatActivity implements LocationListener 
                                     datasource.createMot(mots[i], marqueur.getMarqueur_id());
                                 }
                                 datasource.createCurseur(caract1.getText().toString(), cursor1.getProgress(), marqueur.getMarqueur_id());
-                                datasource.createCurseur(caract1.getText().toString(), cursor1.getProgress(), marqueur.getMarqueur_id());
-                                datasource.createCurseur(caract1.getText().toString(), cursor1.getProgress(), marqueur.getMarqueur_id());
+                                datasource.createCurseur(caract2.getText().toString(), cursor2.getProgress(), marqueur.getMarqueur_id());
+                                datasource.createCurseur(caract3.getText().toString(), cursor3.getProgress(), marqueur.getMarqueur_id());
 
                                 datasource.close();
 
@@ -238,19 +250,53 @@ public class EditActivity extends AppCompatActivity implements LocationListener 
         }
     };
 
-    private View.OnClickListener photoListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            // TODO lien avec l'application appareil photo
-            // image_emp=...;
-            Toast.makeText(view.getContext(),"Le formulaire n'est pas complet !",Toast.LENGTH_LONG).show();
-        }
-    };
-
-
     private boolean isFormularyCompleted(){
         boolean flag=(!site_name.getText().toString().matches(""))&&(!description.getText().toString().matches(""))&&(photo_emp!=null);
         return flag;
+    }
+
+    // Gestion photo
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private View.OnClickListener photoListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(EditActivity.this,
+                            "com.example.android.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
+            }
+
+        }
+    };
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        photo_emp = image.getAbsolutePath();
+        return image;
     }
 
     /**
@@ -300,6 +346,38 @@ public class EditActivity extends AppCompatActivity implements LocationListener 
         datasource.close();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // si une photo a été prise, affichage du thumbnail
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            // Get the dimensions of the View
+            int targetW = btn_photo.getWidth();
+            int targetH = btn_photo.getHeight();
+
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(photo_emp, bmOptions);
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
+
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(photo_emp, bmOptions);
+            mPhotoView.setImageBitmap(bitmap);
+
+            mPhotoView.setVisibility(android.view.View.VISIBLE);
+            btn_photo.setVisibility(android.view.View.GONE);
+        }
+    }
+
+    // LocationListener methods override
     @Override
     public void onLocationChanged(Location location) {
         lat=(float)location.getLatitude();

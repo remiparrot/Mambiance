@@ -33,8 +33,6 @@ import static org.fasol.mambiance.MainActivity.datasource;
  * Created by fasol on 18/11/16.
  */
 
-// TODO geolocalisation
-
 public class MapMarkerActivity extends AppCompatActivity{
 
     /**

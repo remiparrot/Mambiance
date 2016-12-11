@@ -33,7 +33,7 @@ public class LocalDataSource {
     private String[] allColumnsImage = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_IMAGEEMP, MySQLiteHelper.COLUMN_MARQUEURID};
     private String[] allColumnsMot = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_MOTLIBELLE, MySQLiteHelper.COLUMN_MARQUEURID};
     private String[] allColumnsLieu = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_LIEUNOM, MySQLiteHelper.COLUMN_ADRESSE, MySQLiteHelper.COLUMN_LATITUDE, MySQLiteHelper.COLUMN_LONGITUDE};
-    private String[] allColumnsRoseAmbiance = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_ACOUSTICAL, MySQLiteHelper.COLUMN_OLFACTORY, MySQLiteHelper.COLUMN_VISUAL, MySQLiteHelper.COLUMN_THERMAL, MySQLiteHelper.COLUMN_MARQUEURID};
+    private String[] allColumnsRoseAmbiance = {MySQLiteHelper.COLUMN_ID, MySQLiteHelper.COLUMN_OLFACTORY, MySQLiteHelper.COLUMN_VISUAL, MySQLiteHelper.COLUMN_THERMAL, MySQLiteHelper.COLUMN_ACOUSTICAL, MySQLiteHelper.COLUMN_MARQUEURID};
 
     //getters
 
@@ -761,11 +761,11 @@ public class LocalDataSource {
      */
     public RoseAmbiance createRoseAmbiance(float o, float v, float t, float a, long marqueur_id) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
         values.put(MySQLiteHelper.COLUMN_OLFACTORY, o);
-        values.put(MySQLiteHelper.COLUMN_ACOUSTICAL, a);
         values.put(MySQLiteHelper.COLUMN_VISUAL, v);
         values.put(MySQLiteHelper.COLUMN_THERMAL, t);
+        values.put(MySQLiteHelper.COLUMN_ACOUSTICAL, a);
+        values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
         long insertId = database.insert(MySQLiteHelper.TABLE_ROSEAMBIANCE, null, values);
         Cursor cursor = database.query(
                 MySQLiteHelper.TABLE_ROSEAMBIANCE,
@@ -787,9 +787,9 @@ public class LocalDataSource {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_MARQUEURID, marqueur_id);
         values.put(MySQLiteHelper.COLUMN_OLFACTORY, o);
-        values.put(MySQLiteHelper.COLUMN_ACOUSTICAL, a);
         values.put(MySQLiteHelper.COLUMN_VISUAL, v);
         values.put(MySQLiteHelper.COLUMN_THERMAL, t);
+        values.put(MySQLiteHelper.COLUMN_ACOUSTICAL, a);
 
         database.update(MySQLiteHelper.TABLE_ROSEAMBIANCE, values, MySQLiteHelper.COLUMN_ID + " = " + rose.getRoseAmbiance_id(), null);
         return getRoseAmbianceWithId(rose.getRoseAmbiance_id());
