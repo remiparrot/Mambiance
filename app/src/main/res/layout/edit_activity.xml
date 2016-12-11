@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:max="10"
-                    android:progress="0" />
+                    android:progress="5" />
                 <TextView
                     android:id="@+id/caract2"
                     android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:max="10"
-                    android:progress="0" />
+                    android:progress="5" />
                 <TextView
                     android:id="@+id/caract3"
                     android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:max="10"
-                    android:progress="0" />
+                    android:progress="5" />
 
             </LinearLayout>
         </LinearLayout>
@@ -154,7 +154,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:hint="mot1, mot2, mot3, ..."/>
     </LinearLayout>
 
     <Button

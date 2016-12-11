@@ -686,8 +686,8 @@ public class LocalDataSource {
         Cursor c = database.query(MySQLiteHelper.TABLE_MOT, allColumnsMot, MySQLiteHelper.COLUMN_MARQUEURID + " = \"" + id + "\"", null, null, null, null);
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
-            c.move(i);
             l_mot.add(cursorToMot(c));
+            c.moveToNext();
         }
         c.close();
         return l_mot;
