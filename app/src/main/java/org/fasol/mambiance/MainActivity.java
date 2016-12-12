@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         datasource.open();
 
         // drop tables et test ajout dans la BDD
-        datasource.clearLieu();
+        /*datasource.clearLieu();
         datasource.clearMarqueur();
         datasource.clearCurseur();
         datasource.clearImage();
