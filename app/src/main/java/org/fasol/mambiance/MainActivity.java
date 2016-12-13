@@ -30,15 +30,15 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageButton btn_user=null, btn_history=null, btn_map=null, btn_info=null, btn_edit=null;
 
-    public static LocalDataSource datasource;
+    //public static LocalDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        datasource = new LocalDataSource(this);
-        datasource.open();
+        //datasource = new LocalDataSource(this);
+        //datasource.open();
 
         // drop tables et test ajout dans la BDD
         /*datasource.clearLieu();
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         Curseur c2 = datasource.createCurseur("Palpitant", 5, marqueur.getMarqueur_id());
         Curseur c3 = datasource.createCurseur("Formel", 8, marqueur.getMarqueur_id());*/
 
-        datasource.close();
+        //datasource.close();
 
         btn_user=(ImageButton)findViewById(R.id.btn_user);
         btn_edit=(ImageButton)findViewById(R.id.btn_edit);
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        datasource.close();
+        //datasource.close();
     }
 
 }
