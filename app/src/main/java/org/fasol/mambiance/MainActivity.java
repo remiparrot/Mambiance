@@ -1,44 +1,29 @@
 package org.fasol.mambiance;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import org.fasol.mambiance.db.Curseur;
-import org.fasol.mambiance.db.Image;
-import org.fasol.mambiance.db.Lieu;
 import org.fasol.mambiance.db.LocalDataSource;
-import org.fasol.mambiance.db.Marqueur;
-import org.fasol.mambiance.db.Mot;
-import org.fasol.mambiance.db.RoseAmbiance;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton btn_user=null, btn_history=null, btn_map=null, btn_info=null, btn_edit=null;
 
-    //public static LocalDataSource datasource;
+    public static LocalDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //datasource = new LocalDataSource(this);
-        //datasource.open();
+        datasource = new LocalDataSource(this);
+        datasource.open();
 
         // drop tables et test ajout dans la BDD
         /*datasource.clearLieu();
@@ -57,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         Curseur c2 = datasource.createCurseur("Palpitant", 5, marqueur.getMarqueur_id());
         Curseur c3 = datasource.createCurseur("Formel", 8, marqueur.getMarqueur_id());*/
 
-        //datasource.close();
+        datasource.close();
 
         btn_user=(ImageButton)findViewById(R.id.btn_user);
         btn_edit=(ImageButton)findViewById(R.id.btn_edit);
@@ -147,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        //datasource.close();
+        datasource.close();
     }
 
 }

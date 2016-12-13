@@ -1,10 +1,5 @@
 package org.fasol.mambiance.db;
 
-import java.util.Vector;
-
-
-//TODO WTF import src.com.ecn.urbapp.syncToExt.Sync;
-
 import android.content.ContentValues;
 
 public class Lieu extends DataObject {

@@ -8,20 +8,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.fasol.mambiance.db.MySQLiteHelper;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static org.fasol.mambiance.MainActivity.datasource;
 

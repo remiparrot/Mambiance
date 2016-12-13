@@ -19,27 +19,20 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.fasol.mambiance.db.Curseur;
-import org.fasol.mambiance.db.Image;
 import org.fasol.mambiance.db.Lieu;
 import org.fasol.mambiance.db.Marqueur;
-import org.fasol.mambiance.db.Mot;
-import org.fasol.mambiance.db.RoseAmbiance;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +47,6 @@ import static org.fasol.mambiance.MainActivity.datasource;
 /**
  * Created by fasol on 18/11/16.
  */
-
-// TODO lier l'application appareil photo au bouton
-// TODO enregistrer les données dans la BDD
 
 public class EditActivity extends AppCompatActivity implements LocationListener {
 

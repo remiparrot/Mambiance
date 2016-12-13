@@ -2,11 +2,8 @@ package org.fasol.mambiance;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,15 +14,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.Polygon;
-import org.osmdroid.views.overlay.gestures.RotationGestureDetector;
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
-import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.fasol.mambiance.MainActivity.datasource;
 

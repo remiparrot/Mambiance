@@ -1,8 +1,5 @@
 package org.fasol.mambiance.db;
 
-import java.util.Vector;
-
-
 import android.content.ContentValues;
 
 public class Image extends DataObject {
